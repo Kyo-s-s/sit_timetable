@@ -1,0 +1,40 @@
+{
+  "course": "システム理工学部 数理科学科",
+  "class": [
+    {
+      "name": "金融・保険数理",
+      "week": "月",
+      "time": "2",
+      "credit": 2,
+      "category": "専門"
+    },
+    {
+      "name": "代数学III",
+      "week": "月",
+      "time": "3",
+      "credit": 2,
+      "category": "専門"
+    },
+    {
+      "name": "データ構造とアルゴリズム",
+      "week": "月",
+      "time": "3",
+      "credit": 2,
+      "category": "専門"
+    },
+    {
+      "name": "幾何学III",
+      "week": "月",
+      "time": "4",
+      "credit": 2,
+      "category": "専門"
+    },
+    {
+      "name": "システム工学C",
+      "week": "月",
+      "time": "5",
+      "credit": 2,
+      "category": "共通科目"
+    }
+  ]
+}
