@@ -1,4 +1,5 @@
 import React from "react";
+import Form from "react-bootstrap/Form";
 import { Lecture } from "./Lecture"
 
 type TimeTableCellProps = {
@@ -14,16 +15,10 @@ export class TimeTableCell extends React.Component {
 
 	render() {
 		return (
-			<div style = {{
-				width: "150px",
-				height: "100px",
-				backgroundColor: "gray",
+			<div style={{
+				height: "80px",
 			}}>
-				<select style = {{
-					width: "100%",
-					margin: "20px 0px",
-					fontSize: "15px",
-				}}>
+				<Form.Select>
 					{
 						this.props.lectures.map((item, _) => {
 							return (
@@ -31,7 +26,7 @@ export class TimeTableCell extends React.Component {
 							)
 						})
 					}
-				</select>
+				</Form.Select>
 			</div>
 		)
 	}

@@ -1,4 +1,8 @@
 import React from "react";
+import Table from 'react-bootstrap/Table';
+import { Container } from "react-bootstrap";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import test from "../json/test.json"
 import { Lecture, lectureNone, Period, periodNum, toLecture, Week, weekNum } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
@@ -32,64 +36,33 @@ export class TimeTable extends React.Component {
     console.log(JSON.stringify(this.lecturesWeekTime));
   }
 
+  
+
   render() {
     return (
-      <table>
-        <tr>
-          <th></th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-          <th>Saturday</th>
-        </tr>
-        <tr>
-          <td>1限</td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Monday][Period.Period1]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Tuesday][Period.Period1]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Wednesday][Period.Period1]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Thursday][Period.Period1]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Friday][Period.Period1]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Saturday][Period.Period1]} /></td>
-        </tr>
-        <tr>
-          <td>2限</td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Monday][Period.Period2]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Tuesday][Period.Period2]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Wednesday][Period.Period2]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Thursday][Period.Period2]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Friday][Period.Period2]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Saturday][Period.Period2]} /></td>
-        </tr>
-        <tr>
-          <td>3限</td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Monday][Period.Period3]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Tuesday][Period.Period3]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Wednesday][Period.Period3]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Thursday][Period.Period3]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Friday][Period.Period3]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Saturday][Period.Period3]} /></td>
-        </tr>
-        <tr>
-          <td>4限</td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Monday][Period.Period4]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Tuesday][Period.Period4]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Wednesday][Period.Period4]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Thursday][Period.Period4]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Friday][Period.Period4]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Saturday][Period.Period4]} /></td>
-        </tr>
-        <tr>
-          <td>5限</td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Monday][Period.Period5]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Tuesday][Period.Period5]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Wednesday][Period.Period5]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Thursday][Period.Period5]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Friday][Period.Period5]} /></td>
-          <td><TimeTableCell lectures={this.lecturesWeekTime[Week.Saturday][Period.Period5]} /></td>
-        </tr>
-      </table>
+      <Container className="p-3">
+        <Row>
+          { 
+            ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((item, _) => {
+              return <Col>{item}</Col>
+            })
+          }
+        </Row>
+        {
+          [Period.Period1, Period.Period2, Period.Period3, Period.Period4, Period.Period5].map((period, _) => {
+            return (
+              <Row>
+                <Col>{"Period " + period}</Col>
+                {
+                  [Week.Monday, Week.Tuesday, Week.Wednesday, Week.Thursday, Week.Friday, Week.Saturday].map((week, _) => {
+                    return <Col><TimeTableCell lectures={this.lecturesWeekTime[week][period]}/></Col>
+                  })
+                }
+              </Row>
+            )
+          })
+        }
+      </Container>
     );
   }
 }
