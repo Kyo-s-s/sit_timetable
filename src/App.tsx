@@ -6,8 +6,8 @@ import { TimeTable } from './TimeTable/TimeTable';
 
 function App() {
   return (
-    <div className="mx-5">
-      <TimeTable />
+    <div className="m-1">
+      {TimeTable()}
     </div>
   );
 }

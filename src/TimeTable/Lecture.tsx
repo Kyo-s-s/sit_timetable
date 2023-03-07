@@ -9,6 +9,27 @@ export enum Week {
 }
 export const weekNum = 7;
 
+export const weekList = [Week.Monday, Week.Tuesday, Week.Wednesday, Week.Thursday, Week.Friday, Week.Saturday];
+
+export function weekToStr(week: Week): string {
+	switch (week) {
+		case Week.Monday:
+			return "Mon";
+		case Week.Tuesday:
+			return "Tue";
+		case Week.Wednesday:
+			return "Wed";
+		case Week.Thursday:
+			return "Thu";
+		case Week.Friday:
+			return "Fri";
+		case Week.Saturday:
+			return "Sat";
+		default:
+			return "";
+	}
+}
+
 export enum Period {
 	Others = 0,
 	Period1 = 1,
@@ -21,48 +42,50 @@ export enum Period {
 }
 export const periodNum = 8;
 
+export const periodList = [Period.Period1, Period.Period2, Period.Period3, Period.Period4, Period.Period5];
+
 export type Lecture = {
 	name: string;
 	week: Week;
-	time: Period;
+	period: Period;
 	credit: number;
 	category: string;
 }
 
 function toWeek(week: string): Week {
 	switch (week) {
-		case "月":
+		case "月曜日":
 			return Week.Monday;
-		case "火":
+		case "火曜日":
 			return Week.Tuesday;
-		case "水":
+		case "水曜日":
 			return Week.Wednesday;
-		case "木":
+		case "木曜日":
 			return Week.Thursday;
-		case "金":
+		case "金曜日":
 			return Week.Friday;
-		case "土":
+		case "土曜日":
 			return Week.Saturday;
 		default:
 			return Week.Others;
 	}
 }
 
-function toPeriod(period: string): Period {
+function toPeriod(period: number): Period {
 	switch (period) {
-		case "1":
+		case 1:
 			return Period.Period1;
-		case "2":
+		case 2:
 			return Period.Period2;
-		case "3":
+		case 3:
 			return Period.Period3;
-		case "4":
+		case 4:
 			return Period.Period4;
-		case "5":
+		case 5:
 			return Period.Period5;
-		case "6":
+		case 6:
 			return Period.Period6;
-		case "7":
+		case 7:
 			return Period.Period7;
 		default:
 			return Period.Others;
@@ -70,9 +93,9 @@ function toPeriod(period: string): Period {
 }
 
 export const lectureNone = {
-	name: "(なし)",
+	name: "null",
 	week: Week.Others,
-	time: Period.Others,
+	period: Period.Others,
 	credit: 0,
 	category: ""
 };
@@ -80,14 +103,14 @@ export const lectureNone = {
 export function toLecture(
 	name: string,
 	week: string,
-	time: string,
+	period: number,
 	credit: number,
 	category: string
 ): Lecture {
 	return {
 		name: name,
 		week: toWeek(week),
-		time: toPeriod(time),
+		period: toPeriod(period),
 		credit: credit,
 		category: category
 	}
