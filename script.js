@@ -33,6 +33,7 @@ const lectures = classList.map((cls) => {
         "teacher": table[1].innerText,
         "credit": credit,
         "division": division,
+        "isContinued": cls.colSpan > 1,
     }
 })
 

@@ -14,17 +14,17 @@ export const weekList = [Week.Monday, Week.Tuesday, Week.Wednesday, Week.Thursda
 export function weekToStr(week: Week): string {
 	switch (week) {
 		case Week.Monday:
-			return "Mon";
+			return "Monday";
 		case Week.Tuesday:
-			return "Tue";
+			return "Tuesday";
 		case Week.Wednesday:
-			return "Wed";
+			return "Wednesday";
 		case Week.Thursday:
-			return "Thu";
+			return "Thursday";
 		case Week.Friday:
-			return "Fri";
+			return "Friday";
 		case Week.Saturday:
-			return "Sat";
+			return "Saturday";
 		default:
 			return "";
 	}
@@ -97,7 +97,7 @@ export const lectureNone = {
 	week: Week.Others,
 	period: Period.Others,
 	credit: 0,
-	category: ""
+	category: "null"
 };
 
 export function toLecture(

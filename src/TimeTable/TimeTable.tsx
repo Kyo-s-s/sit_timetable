@@ -10,6 +10,7 @@ import { TimeTableCell } from "./TimeTableCell";
 type TimeTableState = {
   selectedLecture: Lecture[][];
   creditSum: number;
+  creditDivision: { [key: string]: number };
 }
 
 export const TimeTable = () => {
@@ -20,26 +21,35 @@ export const TimeTable = () => {
       selectedLecture[i].push(lectureNone);
     }
   }
-  const [state, setState] = React.useState<TimeTableState>({
-    selectedLecture: selectedLecture,
-    creditSum: 0,
-  });
-
+  
   let lectures = test.lectures.map((item, _) => {
     console.log(JSON.stringify(item));
     return toLecture(item.name, item.week, item.period, item.credit, item.division);
-  });
+  }).concat([lectureNone]);
 
-  const calculateCreditSum = () => {
+  let creditDivision: { [key: string]: number } = {};
+  lectures.forEach((lecture, _) => creditDivision[lecture.category] = 0);
+
+  const [state, setState] = React.useState<TimeTableState>({
+    selectedLecture: selectedLecture,
+    creditSum: 0,
+    creditDivision: creditDivision,
+  });
+  
+  const calculateCredit = (): [number, { [key: string]: number}] => {
     let sum = 0;
+    let division: { [key: string]: number } = {};
+    lectures.forEach((lecture, _) => division[lecture.category] = 0);
+
     for (let i = 0; i < weekNum; i++) {
       for (let j = 0; j < periodNum; j++) {
         sum += state.selectedLecture[i][j].credit;
+        division[state.selectedLecture[i][j].category] += state.selectedLecture[i][j].credit;
       }
     }
-    return sum;
+    return [sum, division];
   }
-
+  
   return (
     <>
       <Container className="p-1">
@@ -72,9 +82,11 @@ export const TimeTable = () => {
                           onSelect: (lecture: Lecture) => {
                             console.log(lecture.name);
                             state.selectedLecture[week][period] = lecture;
+                            const [creditSum, creditDivision] = calculateCredit();
                             setState({
                               selectedLecture: state.selectedLecture,
-                              creditSum: calculateCreditSum(),
+                              creditSum: creditSum,
+                              creditDivision: creditDivision,
                             });
                             console.log(JSON.stringify(state.selectedLecture));
                           },
@@ -89,6 +101,14 @@ export const TimeTable = () => {
         }
       </Container>
       <p>creditSum : {state.creditSum}</p>
+      {
+        Object.keys(state.creditDivision).map((key, _) => {
+          if (key === lectureNone.category) return;
+          return (
+            <p>{key} : {state.creditDivision[key]}</p>
+          )
+        })
+      }
     </>
   )
 }
