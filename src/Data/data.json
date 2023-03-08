@@ -1,0 +1,53 @@
+{
+    "departments": [
+        {
+            "name": "システム理工学部 数理科学科",
+            "years": [
+                {
+                    "year": "B1",
+                    "semesters": [
+                        {
+                            "semester": "First",
+                            "files": [
+                                "hoge"
+                            ]
+                        },
+                        {
+                            "semester": "Second",
+                            "files": [
+                                "hoge"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "year": "B2",
+                    "semesters": [
+                        {
+                            "semester": "First",
+                            "files": [
+                                "hoge"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name":"工学部 情報工学科",
+            "years": [
+                {
+                    "year": "B1",
+                    "semesters": [
+                        {
+                            "semester": "First",
+                            "files": [
+                                "hoge"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

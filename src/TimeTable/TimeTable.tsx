@@ -3,9 +3,26 @@ import Table from 'react-bootstrap/Table';
 import { Container } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Form from "react-bootstrap/Form";
 import test from "../json/test.json"
+import keyData from "../Data/data.json"
 import { Lecture, lectureNone, Period, periodList, periodNum, toLecture, Week, weekList, weekNum, weekToStr } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
+
+type Semester = {
+  semester: string,
+  files: String[],
+}
+
+type Year = {
+  year: string,
+  semesters: Semester[],
+}
+
+type Department = {
+  name: string;
+  years: Year[];
+}
 
 type TimeTableState = {
   selectedLecture: Lecture[][];
@@ -21,9 +38,13 @@ export const TimeTable = () => {
       selectedLecture[i].push(lectureNone);
     }
   }
+
+  const [department, setDepartment] = React.useState<Department | undefined>();
+  const [year, setYear] = React.useState<Year | undefined>();
+  const [semester, setSemester] = React.useState<Semester | undefined>();
   
   let lectures = test.lectures.map((item, _) => {
-    console.log(JSON.stringify(item));
+    // console.log(JSON.stringify(item));
     return toLecture(item.name, item.week, item.period, item.credit, item.division);
   }).concat([lectureNone]);
 
@@ -52,7 +73,37 @@ export const TimeTable = () => {
   
   return (
     <>
-      <Container className="p-1">
+      <Container>
+        <Row>
+          <Col sm = {8}>
+            <Form.Select onChange = {e => setDepartment(keyData.departments.find((dep, _) => dep.name === e.target.value ))}>
+              <option hidden>Department</option>
+              {
+                keyData.departments.map((department, _) => <option key = {department.name} value = {department.name}>{department.name}</option>)
+              }
+            </Form.Select>
+          </Col>
+          <Col sm = {2}>
+            <Form.Select onChange = {e => setYear(department?.years.find((year, _) => year.year === e.target.value ))}>
+              <option hidden>Year</option>
+              {
+                department &&
+                department.years.map((year, _) => <option key = {year.year} value = {year.year}>{year.year}</option>)
+              }
+            </Form.Select>
+          </Col>
+          <Col sm = {2}>
+            <Form.Select onChange = {e => setSemester(year?.semesters.find((seme, _) => seme.semester === e.target.value ))}>
+              <option hidden>Semester</option>
+              {
+                year &&
+                year.semesters.map((semester, _) => <option key = {semester.semester} value = {semester.semester}>{semester.semester}</option>)
+              }
+            </Form.Select>
+          </Col>
+        </Row>
+      </Container>
+      <Container className="py-4">
         <Row>
           <Col xs={1}></Col>
           {
@@ -80,7 +131,6 @@ export const TimeTable = () => {
                           period: period,
                           lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period})),
                           onSelect: (lecture: Lecture) => {
-                            console.log(lecture.name);
                             state.selectedLecture[week][period] = lecture;
                             const [creditSum, creditDivision] = calculateCredit();
                             setState({
@@ -88,7 +138,6 @@ export const TimeTable = () => {
                               creditSum: creditSum,
                               creditDivision: creditDivision,
                             });
-                            console.log(JSON.stringify(state.selectedLecture));
                           },
                         })}
                       </Col>
