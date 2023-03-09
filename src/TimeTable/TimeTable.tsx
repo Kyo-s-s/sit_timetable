@@ -1,10 +1,8 @@
 import React from "react";
-import Table from 'react-bootstrap/Table';
-import { Container } from "react-bootstrap";
+import { Button, Container, Modal } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
-import test from "../json/test.json"
 import keyData from "../Data/data.json"
 import { Lecture, lectureNone, Period, periodList, periodNum, toLecture, Week, weekList, weekNum, weekToStr } from "./Lecture";
 import { TimeTableContents } from "./TimeTableContents";
@@ -47,15 +45,6 @@ export const TimeTable = () => {
   const [year, setYear] = React.useState<Year | undefined>();
   const [semester, setSemester] = React.useState<Semester | undefined>();
   
-  let lectures = test.lectures.map((item, _) => {
-    // console.log(JSON.stringify(item));
-    return toLecture(item.name, item.week, item.period, item.credit, item.division);
-  }).concat([lectureNone]);
-
-  let creditDivision: { [key: string]: number } = {};
-  lectures.forEach((lecture, _) => creditDivision[lecture.category] = 0);
-
-  
   const departmentOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDepartment(keyData.departments.find((dep, _) => dep.name === e.target.value ));
     setYear(undefined);
@@ -71,19 +60,6 @@ export const TimeTable = () => {
     setSemester(year?.semesters.find((seme, _) => seme.semester === e.target.value ));
   };
   
-  // const updateLecture = () => {
-  //   console.log("update");
-  //   console.log(department?.name);
-  //   console.log(year?.year);
-  //   console.log(semester?.semester);
-  //   // if (semester) {
-  //     // semester.files.forEach((file, _) => {
-  //       // const data = require("../Data/" + file);
-  //       // console.log(JSON.stringify(data));
-  //     // });
-  //   // }
-  // };
-
   const generateLectures = (): Lecture[] => {
     console.log("generate " + semester?.semester);
     let result: Lecture[] = [lectureNone];   
@@ -98,41 +74,42 @@ export const TimeTable = () => {
     return result;
   };
 
+  const [show, setShow] = React.useState(true);
+
   return (
     <>
-      <Container>
-        <Row>
-          <Col sm = {8}>
-            <Form.Select onChange = {e => departmentOnChange(e)}>
-              <option hidden>Department</option>
-              {
-                keyData.departments.map((department, _) => <option key = {department.name} value = {department.name}>{department.name}</option>)
-              }
-            </Form.Select>
-          </Col>
-          <Col sm = {2}>
-            <Form.Select onChange = {e => yearOnChange(e)}>
-              <option hidden>Year</option>
-              {
-                department &&
-                department.years.map((year, _) => <option key = {year.year} value = {year.year}>{year.year}</option>)
-              }
-            </Form.Select>
-          </Col>
-          <Col sm = {2}>
-            <Form.Select onChange = {e => semesterOnChange(e)}>
-              <option hidden>Semester</option>
-              {
-                year &&
-                year.semesters.map((semester, _) => <option key = {semester.semester} value = {semester.semester}>{semester.semester}</option>)
-              }
-            </Form.Select>
-          </Col>
-        </Row>
-      </Container>
-      {
-        TimeTableContents(generateLectures())
-      }
+      <Modal show = {show}>
+        <Modal.Header>
+          <Modal.Title>Select Department/Year/Semester</Modal.Title>
+        </Modal.Header>
+        <div className = "p-2">
+          <Form.Select className = "my-2" onChange = {e => departmentOnChange(e)}>
+            <option hidden>Department</option>
+            {
+              keyData.departments.map((department, _) => <option key = {department.name} value = {department.name}>{department.name}</option>)
+            }
+          </Form.Select>
+          <Form.Select className = "mb-2" onChange = {e => yearOnChange(e)}>
+            <option hidden>Year</option>
+            {
+              department &&
+              department.years.map((year, _) => <option key = {year.year} value = {year.year}>{year.year}</option>)
+            }
+          </Form.Select>
+          <Form.Select onChange = {e => semesterOnChange(e)}>
+            <option hidden>Semester</option>
+            {
+              year &&
+              year.semesters.map((semester, _) => <option key = {semester.semester} value = {semester.semester}>{semester.semester}</option>)
+            }
+          </Form.Select>
+        </div>
+        <Modal.Footer>
+          <Button disabled = {semester === undefined} onClick = {() => setShow(false)}>Done</Button>
+        </Modal.Footer>
+      </Modal>
+
+      {TimeTableContents(generateLectures())}
     </>
   )
 }
