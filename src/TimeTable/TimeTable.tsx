@@ -61,7 +61,6 @@ export const TimeTable = () => {
   };
   
   const generateLectures = (): Lecture[] => {
-    console.log("generate " + semester?.semester);
     let result: Lecture[] = [lectureNone];   
     if (semester) {
       semester.files.forEach((file, _) => {

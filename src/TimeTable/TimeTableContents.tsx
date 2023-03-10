@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Lecture, lectureNone, periodList, periodNum, weekList, weekNum, weekToStr } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
+import { TimeTableCredit } from "./TimeTableCredit";
 
 
 export const TimeTableContents = (lectures: Lecture[]) => {
@@ -17,8 +18,8 @@ export const TimeTableContents = (lectures: Lecture[]) => {
 
   const [selectedLecture, setSelectedLecture] = React.useState(_selectedLecture);
 
-  const onSelect = (lecture: Lecture) => {
-    selectedLecture[lecture.week][lecture.period] = lecture;
+  const onSelect = (week: number, period: number, lecture: Lecture) => {
+    selectedLecture[week][period] = lecture;
     setSelectedLecture(selectedLecture);
   };
 
@@ -47,7 +48,7 @@ export const TimeTableContents = (lectures: Lecture[]) => {
                       week: week,
                       period: period,
                       lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period})),
-                      onSelect: onSelect,
+                      onSelect: (lecture: Lecture) => { onSelect(week, period, lecture) },
                     })}
                   </Col>
                 })
@@ -56,6 +57,7 @@ export const TimeTableContents = (lectures: Lecture[]) => {
           })
         }
       </Container> 
+      {TimeTableCredit(lectures, selectedLecture)}
     </>
   )
 };
