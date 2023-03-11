@@ -5,7 +5,7 @@ import { TimeTableCell } from "./TimeTableCell";
 import { TimeTableCredit } from "./TimeTableCredit";
 
 
-export const TimeTableContents = (lectures: Lecture[]) => {
+export const TimeTableContents = (show: boolean, lectures: Lecture[]) => {
   let _selectedLecture: Lecture[][] = [];
   for (let i = 0; i < weekNum; i++) {
     _selectedLecture.push([]);
@@ -22,7 +22,7 @@ export const TimeTableContents = (lectures: Lecture[]) => {
   };
 
   return (
-    <>
+    <div style={{ display: show ? "block" : "none" }}>
       <Container className="py-4">
         <Table borderless style={{ tableLayout: "fixed" }}>
           <tbody>
@@ -60,6 +60,6 @@ export const TimeTableContents = (lectures: Lecture[]) => {
         </Table>
       </Container>
       {TimeTableCredit(lectures, selectedLecture)}
-    </>
+    </div>
   )
 };
