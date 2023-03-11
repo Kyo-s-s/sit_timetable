@@ -1,7 +1,5 @@
 import React from "react";
-import { Container } from "react-bootstrap";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { Container, Table } from "react-bootstrap";
 import { Lecture, lectureNone, periodList, periodNum, weekList, weekNum, weekToStr } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
 import { TimeTableCredit } from "./TimeTableCredit";
@@ -26,37 +24,39 @@ export const TimeTableContents = (lectures: Lecture[]) => {
   return (
     <>
       <Container className = "py-4">
-        <Row>
-          <Col xs = {1}></Col>
+        <Table style = {{tableLayout: "fixed"}}>
+          <tr>
+            <td></td>
+            {
+              weekList.map((week, _) => {
+                return <td className = "text-center"><h5>{weekToStr(week)}</h5></td>
+              })
+            }
+          </tr>
           {
-            weekList.map((week, _) => {
-              return <Col className = "text-center"><h5>{weekToStr(week)}</h5></Col>
+            periodList.map((period, _) => {
+              return <tr>
+                <td className = "text-center">
+                  <h5>{"Period" + period}</h5>
+                </td>
+                {
+                  weekList.map((week, _) => {
+                    return <td className = "p-1">
+                      {TimeTableCell({
+                        nowSelect: selectedLecture[week][period],
+                        week: week,
+                        period: period,
+                        lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period})),
+                        onSelect: (lecture: Lecture) => { onSelect(week, period, lecture) },
+                      })}
+                    </td>
+                  })
+                }
+              </tr>
             })
           }
-        </Row>
-        {
-          periodList.map((period, _) => {
-            return <Row>
-              <Col style = {{display: "flex", justifyItems: "center", alignItems: "center"}} xs = {1}>
-                <h5>{"Period" + period}</h5>
-              </Col>
-              {
-                weekList.map((week, _) => {
-                  return <Col className = "p-1">
-                    {TimeTableCell({
-                      nowSelect: selectedLecture[week][period],
-                      week: week,
-                      period: period,
-                      lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period})),
-                      onSelect: (lecture: Lecture) => { onSelect(week, period, lecture) },
-                    })}
-                  </Col>
-                })
-              }
-            </Row>
-          })
-        }
-      </Container> 
+        </Table>
+      </Container>
       {TimeTableCredit(lectures, selectedLecture)}
     </>
   )
