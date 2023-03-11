@@ -59,19 +59,23 @@ export const TimeTable = () => {
   };
   
   const generateLectures = (): Lecture[] => {
-    let result: Lecture[] = [lectureNone];   
+    let lectures: Lecture[] = [lectureNone];   
     if (semester) {
       semester.files.forEach((file, _) => {
         const data = require("../Data/" + file);
         data.lectures.forEach((lecture: lectureJson) => {
-          result.push(toLecture(lecture.name, lecture.week, lecture.period, lecture.credit, lecture.division, lecture.isContinued));
+          lectures.push(toLecture(lecture.name, lecture.week, lecture.period, lecture.credit, lecture.division, lecture.isContinued));
           if (lecture.isContinued) {
-            result.push(toLecture(lecture.name, lecture.week, lecture.period + 1, 0, lecture.division, lecture.isContinued));
+            lectures.push(toLecture(lecture.name, lecture.week, lecture.period + 1, 0, lecture.division, lecture.isContinued));
           }
         });
       });
     }
-    return result;
+    let result: Lecture[] = [];
+    lectures.forEach((lec, _) => {
+      if (result.filter((res, _) => res.name === lec.name && res.week === lec.week && res.period === lec.period).length === 0) result.push(lec);
+    });
+    return result
   };
 
   const [show, setShow] = React.useState(true);
