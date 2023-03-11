@@ -1,8 +1,10 @@
 import React from "react";
 import { Form } from "react-bootstrap";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Button from "react-bootstrap/esm/Button";
 import Card from "react-bootstrap/esm/Card";
 import Modal from "react-bootstrap/esm/Modal";
+import Tooltip from "react-bootstrap/esm/Tooltip";
 import { Lecture, Week, Period, weekToStr, lectureNone } from "./Lecture";
 
 type Props = {
@@ -23,18 +25,39 @@ export const TimeTableCell = (props: Props) => {
 		<>
 			<Card className = "p-0" onClick={handleShow}>
 				<Card.Body>
-          <Card.Title className="text-truncate">
-						{props.nowSelect.name}
-					</Card.Title>
+          {
+            props.nowSelect.name === lectureNone.name ?
+              <Card.Title className="text-truncate">
+                {props.nowSelect.name}
+              </Card.Title> :
+              <OverlayTrigger
+                overlay={
+                  <Tooltip>
+                    {props.nowSelect.name}
+                  </Tooltip>
+                }
+              >
+                <Card.Title className="text-truncate">
+                  {props.nowSelect.name}
+                </Card.Title>
+              </OverlayTrigger>
+          }
 					<Card.Text className="m-0 text-truncate">
             credit: {props.nowSelect.credit}
           </Card.Text>
-          <Card.Text className="m-0 text-truncate">
-            {
-              props.nowSelect.category === lectureNone.category ?
-                "category" : props.nowSelect.category
-            }
-					</Card.Text>
+          {
+            props.nowSelect.category === lectureNone.category ? 
+              <Card.Text className="m-0 text-truncate">category</Card.Text> :
+              <OverlayTrigger
+                overlay = {
+                  <Tooltip>
+                    {props.nowSelect.category}
+                  </Tooltip>
+                }
+              >
+                <Card.Text className="m-0 text-truncate">{props.nowSelect.category}</Card.Text>
+              </OverlayTrigger>
+          }
 				</Card.Body>
 			</Card>
 
