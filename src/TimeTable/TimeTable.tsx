@@ -30,7 +30,7 @@ type lectureJson = {
   isContinued: boolean,
 }
 
-export type creditJson = {
+type creditJson = {
   group: string,
   name: string,
   division: string,
@@ -74,7 +74,6 @@ export const TimeTable = () => {
       e.target.files[0].text().then((text) => {
         const data = JSON.parse(text).credits as creditJson[];
         setCreditData(data);
-        data.forEach((credit, _) => console.log(credit.name));
       })
     }
   };
@@ -142,9 +141,8 @@ export const TimeTable = () => {
           <Button disabled = {semester === undefined} onClick = {() => setShow(false)}>Done</Button>
         </Modal.Footer>
       </Modal>
-
       {
-        TimeTableContents(generateLectures())
+        TimeTableContents(!show, generateLectures())
       }
     </>
   )
