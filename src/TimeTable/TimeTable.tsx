@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Nav, OverlayTrigger, Popover } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
 import { Lecture, lectureNone, Period, periodList, periodNum, toLecture, Week, weekList, weekNum, weekToStr } from "./Lecture";
@@ -132,9 +132,9 @@ export const TimeTable = () => {
               year.semesters.map((semester, _) => <option key = {semester.semester} value = {semester.semester}>{semester.semester}</option>)
             }
           </Form.Select>
-          <Form.Label className="mt-1">
-            optional: your credit file
-          </Form.Label>
+            <Form.Label className="mt-1">
+              optional: your credit file (How to get: <a href="https://sit-graduation-checker.ecto0310.com/usage" target="_blank">here</a>)
+            </Form.Label>
           <Form.Control type="file" accept="application/json" onChange={creditFileOnChange}/>
         </div>
         <Modal.Footer>
