@@ -50,6 +50,7 @@ export type Lecture = {
 	period: Period;
 	credit: number;
 	category: string;
+	isContinued: boolean;
 }
 
 function toWeek(week: string): Week {
@@ -92,12 +93,13 @@ function toPeriod(period: number): Period {
 	}
 }
 
-export const lectureNone = {
+export const lectureNone: Lecture = {
 	name: "null",
 	week: Week.Others,
 	period: Period.Others,
 	credit: 0,
-	category: "null"
+	category: "null",
+	isContinued: false
 };
 
 export function toLecture(
@@ -105,13 +107,15 @@ export function toLecture(
 	week: string,
 	period: number,
 	credit: number,
-	category: string
+	category: string,
+	isContinued: boolean
 ): Lecture {
 	return {
 		name: name,
 		week: toWeek(week),
 		period: toPeriod(period),
 		credit: credit,
-		category: category
+		category: category,
+		isContinued: isContinued
 	}
 }
