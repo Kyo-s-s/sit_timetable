@@ -1,7 +1,5 @@
 import React from "react";
-import { Button, Container, Modal } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import { Button, Modal } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
 import { Lecture, lectureNone, Period, periodList, periodNum, toLecture, Week, weekList, weekNum, weekToStr } from "./Lecture";
@@ -108,7 +106,9 @@ export const TimeTable = () => {
         </Modal.Footer>
       </Modal>
 
-      {TimeTableContents(generateLectures())}
+      {
+        TimeTableContents(generateLectures())
+      }
     </>
   )
 }
