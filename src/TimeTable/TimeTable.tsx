@@ -64,7 +64,10 @@ export const TimeTable = () => {
       semester.files.forEach((file, _) => {
         const data = require("../Data/" + file);
         data.lectures.forEach((lecture: lectureJson) => {
-          result.push(toLecture(lecture.name, lecture.week, lecture.period, lecture.credit, lecture.division));
+          result.push(toLecture(lecture.name, lecture.week, lecture.period, lecture.credit, lecture.division, lecture.isContinued));
+          if (lecture.isContinued) {
+            result.push(toLecture(lecture.name, lecture.week, lecture.period + 1, 0, lecture.division, lecture.isContinued));
+          }
         });
       });
     }
