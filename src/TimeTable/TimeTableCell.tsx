@@ -3,9 +3,7 @@ import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/esm/Button";
 import Card from "react-bootstrap/esm/Card";
 import Modal from "react-bootstrap/esm/Modal";
-import ListGroup from "react-bootstrap/esm/ListGroup";
-import ModalDialog from "react-bootstrap/esm/ModalDialog";
-import { Lecture, Week, Period, weekToStr } from "./Lecture";
+import { Lecture, Week, Period, weekToStr, lectureNone } from "./Lecture";
 
 type Props = {
 	nowSelect: Lecture,
@@ -23,14 +21,19 @@ export const TimeTableCell = (props: Props) => {
 
 	return (
 		<>
-			<Card onClick={handleShow}>
+			<Card className = "p-0" onClick={handleShow}>
 				<Card.Body>
-					<Card.Title>
+          <Card.Title className="text-truncate">
 						{props.nowSelect.name}
 					</Card.Title>
-					<Card.Text>
-						<p style={{margin: "0pt"}}>credit: {props.nowSelect.credit}</p>
-						<p style={{margin: "0pt"}}>category: {props.nowSelect.category}</p>
+					<Card.Text className="m-0 text-truncate">
+            credit: {props.nowSelect.credit}
+          </Card.Text>
+          <Card.Text className="m-0 text-truncate">
+            {
+              props.nowSelect.category === lectureNone.category ?
+                "category" : props.nowSelect.category
+            }
 					</Card.Text>
 				</Card.Body>
 			</Card>
