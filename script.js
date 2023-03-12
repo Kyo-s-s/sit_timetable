@@ -26,6 +26,8 @@ const lectures = classList.map((cls) => {
         division = divisionParent.children[0].innerText;
     }
 
+    const time = Number(cls.attributes.colspan.value);
+
     return {
         "name" : table[2].innerText,
         "week": week,
@@ -33,7 +35,7 @@ const lectures = classList.map((cls) => {
         "teacher": table[1].innerText,
         "credit": credit,
         "division": division,
-        "isContinued": cls.colSpan > 1,
+        "time": time
     }
 })
 
