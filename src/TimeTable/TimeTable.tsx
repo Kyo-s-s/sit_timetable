@@ -27,7 +27,7 @@ type lectureJson = {
   teacher: string,
   credit: number,
   division: string,
-  isContinued: boolean,
+  time: number,
 }
 
 type creditJson = {
@@ -84,9 +84,15 @@ export const TimeTable = () => {
       semester.files.forEach((file, _) => {
         const data = require("../Data/" + file);
         data.lectures.forEach((lecture: lectureJson) => {
-          lectures.push(toLecture(lecture.name, lecture.week, lecture.period, lecture.credit, lecture.division, lecture.isContinued));
-          if (lecture.isContinued) {
-            lectures.push(toLecture(lecture.name, lecture.week, lecture.period + 1, 0, lecture.division, lecture.isContinued));
+          for (let i = 0; i < lecture.time; i++) {
+            lectures.push(toLecture(
+              lecture.name,
+              lecture.week,
+              lecture.period + i,
+              i === 0 ? lecture.credit : 0,
+              lecture.division,
+              lecture.time
+            ))
           }
         });
       });
