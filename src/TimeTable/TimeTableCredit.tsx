@@ -1,12 +1,11 @@
 import React from 'react';
-import { Container, Row, Col, Table } from 'react-bootstrap';
+import { Container, Row, Table } from 'react-bootstrap';
 import { Lecture, lectureNone } from './Lecture';
 
 type Credits = { [key: string]: number };
 
 export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][], obtained: { [key: string]: number } = {}) => {
   let credits: Credits = {};
-  let sum = 0;
   for (let lecture of lectures) {
     if (lecture.name === lectureNone.name) continue;
     credits[lecture.category] = 0;

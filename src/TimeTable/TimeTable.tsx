@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Modal, Nav, OverlayTrigger, Popover } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
-import { Lecture, lectureNone, Period, periodList, periodNum, toLecture, Week, weekList, weekNum, weekToStr } from "./Lecture";
+import { Lecture, lectureNone, periodNum, toLecture, weekNum } from "./Lecture";
 import { TimeTableContents } from "./TimeTableContents";
 
 type Semester = {
@@ -160,7 +160,7 @@ export const TimeTable = () => {
             }
           </Form.Select>
             <Form.Label className="mt-1">
-              optional: your credit file (How to get: <a href="https://sit-graduation-checker.ecto0310.com/usage" target="_blank">here</a>)
+              optional: your credit file (How to get: <a href="https://sit-graduation-checker.ecto0310.com/usage">here</a>)
             </Form.Label>
           <Form.Control type="file" accept="application/json" onChange={creditFileOnChange}/>
         </div>
