@@ -4,8 +4,7 @@ import { Lecture, lectureNone } from './Lecture';
 
 type Credits = { [key: string]: number };
 
-export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][]) => {
-
+export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][], obtained: { [key: string]: number } = {}) => {
   let credits: Credits = {};
   let sum = 0;
   for (let lecture of lectures) {
@@ -17,7 +16,6 @@ export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][
     for (let j = 0; j < selectedLecture[i].length; j++) {
       if (selectedLecture[i][j].name !== lectureNone.name) {
         credits[selectedLecture[i][j].category] += selectedLecture[i][j].credit;
-        sum += selectedLecture[i][j].credit;
       }
     }
   }
@@ -41,10 +39,15 @@ export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][
               <tr>
                 {
                   Object.keys(credits).map((key, _) => {
-                    return <td>{credits[key]}</td>
+                    return <td>{credits[key] + (obtained[key] ?? 0)}</td>
                   })
                 }
-                <td>{sum}</td>
+                <td>
+                  {
+                    Object.values(credits).reduce((a, b) => a + b, 0) + 
+                    Object.values(obtained).reduce((a, b) => a + b, 0)
+                  }
+                </td>
               </tr>
             </tbody>
           </Table>

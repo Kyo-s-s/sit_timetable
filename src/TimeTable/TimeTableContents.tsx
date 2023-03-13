@@ -5,7 +5,11 @@ import { TimeTableCell } from "./TimeTableCell";
 import { TimeTableCredit } from "./TimeTableCredit";
 
 
-export const TimeTableContents = (show: boolean, lectures: Lecture[]) => {
+export const TimeTableContents = (
+  show: boolean, 
+  lectures: Lecture[],
+  obtained: { [key: string]: number } | undefined
+) => {
   let _selectedLecture: Lecture[][] = [];
   for (let i = 0; i < weekNum; i++) {
     _selectedLecture.push([]);
@@ -60,6 +64,7 @@ export const TimeTableContents = (show: boolean, lectures: Lecture[]) => {
         </Table>
       </Container>
       {TimeTableCredit(lectures, selectedLecture)}
+      {obtained && TimeTableCredit(lectures, selectedLecture, obtained)}
     </div>
   )
 };

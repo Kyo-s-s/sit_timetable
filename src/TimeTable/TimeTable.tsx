@@ -40,6 +40,11 @@ type creditJson = {
   period: string,
 }
 
+const checkGrade = (grade: string): boolean => {
+  const accept = ["S", "A", "B", "C", "N"];
+  return accept.includes(grade);
+};
+
 export const TimeTable = () => {
   let selectedLecture: Lecture[][] =  [];
   for (let i = 0; i < weekNum; i++) {
@@ -101,13 +106,29 @@ export const TimeTable = () => {
     lectures.forEach((lec, _) => {
       if (
         result.filter((res, _) => res.name === lec.name && res.week === lec.week && res.period === lec.period).length === 0
-        && (creditData === undefined || creditData.find((credit, _) => credit.name === lec.name) === undefined)
+        && (creditData === undefined || creditData.find((credit, _) => checkGrade(credit.grade) && credit.name === lec.name) === undefined)
       ) {
         result.push(lec);
       }
     });
     return result
   };
+
+  const generateObtained = (): { [key: string]: number } | undefined => {
+    if (creditData === undefined) {
+      return undefined;
+    }
+    let result: { [key: string]: number } = {};
+    creditData.forEach((credit, _) => {
+      if (checkGrade(credit.grade)) {
+        if (result[credit.group] === undefined) {
+          result[credit.group] = 0;
+        }
+        result[credit.group] += credit.count;
+      }
+    })
+    return result;
+  }
 
   const [show, setShow] = React.useState(true);
 
@@ -121,21 +142,21 @@ export const TimeTable = () => {
           <Form.Select className = "my-2" onChange = {e => departmentOnChange(e)}>
             <option hidden>Department</option>
             {
-              keyData.departments.map((department, _) => <option key = {department.name} value = {department.name}>{department.name}</option>)
+              keyData.departments.map((department, _) => <option value = {department.name}>{department.name}</option>)
             }
           </Form.Select>
           <Form.Select className = "mb-2" onChange = {e => yearOnChange(e)}>
             <option hidden>Year</option>
             {
               department &&
-              department.years.map((year, _) => <option key = {year.year} value = {year.year}>{year.year}</option>)
+              department.years.map((year, _) => <option key = {department?.name + year.year} value = {year.year}>{year.year}</option>)
             }
           </Form.Select>
           <Form.Select className="mb-2" onChange = {e => semesterOnChange(e)}>
             <option hidden>Semester</option>
             {
               year &&
-              year.semesters.map((semester, _) => <option key = {semester.semester} value = {semester.semester}>{semester.semester}</option>)
+              year.semesters.map((semester, _) => <option key = {department?.name + year?.year + semester.semester} value = {semester.semester}>{semester.semester}</option>)
             }
           </Form.Select>
             <Form.Label className="mt-1">
@@ -148,7 +169,7 @@ export const TimeTable = () => {
         </Modal.Footer>
       </Modal>
       {
-        TimeTableContents(!show, generateLectures())
+        TimeTableContents(!show, generateLectures(), generateObtained())
       }
     </>
   )
