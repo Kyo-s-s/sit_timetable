@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/sit_timetable/static/css/main.756af292.css",
-    "main.js": "/sit_timetable/static/js/main.314fea68.js",
+    "main.js": "/sit_timetable/static/js/main.34f0ceff.js",
     "static/js/787.d1f6e6bf.chunk.js": "/sit_timetable/static/js/787.d1f6e6bf.chunk.js",
     "index.html": "/sit_timetable/index.html",
     "main.756af292.css.map": "/sit_timetable/static/css/main.756af292.css.map",
-    "main.314fea68.js.map": "/sit_timetable/static/js/main.314fea68.js.map",
+    "main.34f0ceff.js.map": "/sit_timetable/static/js/main.34f0ceff.js.map",
     "787.d1f6e6bf.chunk.js.map": "/sit_timetable/static/js/787.d1f6e6bf.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.756af292.css",
-    "static/js/main.314fea68.js"
+    "static/js/main.34f0ceff.js"
   ]
 }
