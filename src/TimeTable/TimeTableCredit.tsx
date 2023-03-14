@@ -6,8 +6,8 @@ import { Lecture, lectureNone } from './Lecture';
 type Credits = { [key: string]: number };
 
 export const TimeTableCredit = (
-  lectures: Lecture[], 
-  selectedLecture: Lecture[][], 
+  lectures: Lecture[],
+  selectedLecture: Lecture[][],
   cardColor: CardColor,
   obtained: { [key: string]: number } = {}
 ) => {
@@ -29,12 +29,12 @@ export const TimeTableCredit = (
     <>
       <Container>
         <Row>
-          <Table style={{textAlign: "right"}}>
+          <Table style={{ textAlign: "right" }}>
             <thead>
               <tr>
                 {
                   Object.keys(credits).map((key, _) => {
-                    return <th style = {{ backgroundColor: cardColor.getColor(key) }}>
+                    return <th style={{ backgroundColor: cardColor.getColor(key) }}>
                       {key}
                     </th>
                   })
@@ -53,7 +53,7 @@ export const TimeTableCredit = (
                 }
                 <td>
                   {
-                    Object.values(credits).reduce((a, b) => a + b, 0) + 
+                    Object.values(credits).reduce((a, b) => a + b, 0) +
                     Object.values(obtained).reduce((a, b) => a + b, 0)
                   }
                 </td>
