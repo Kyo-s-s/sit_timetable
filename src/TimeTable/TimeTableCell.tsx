@@ -6,12 +6,14 @@ import Card from "react-bootstrap/esm/Card";
 import Modal from "react-bootstrap/esm/Modal";
 import Tooltip from "react-bootstrap/esm/Tooltip";
 import { Lecture, Week, Period, weekToStr, lectureNone } from "./Lecture";
+import { CardColor } from "./CardColor";
 
 type Props = {
 	nowSelect: Lecture,
 	week: Week,
 	period: Period,
 	lectures: Lecture[];
+	cardColor: CardColor;
 	onSelect: (lecture: Lecture) => void;
 }
 
@@ -23,7 +25,7 @@ export const TimeTableCell = (props: Props) => {
 
 	return (
 		<>
-			<Card className = "p-0" onClick={handleShow}>
+			<Card className = "p-0" onClick={handleShow} style={{ backgroundColor: props.cardColor.getColor(props.nowSelect.category) }}>
 				<Card.Body>
           {
             props.nowSelect.name === lectureNone.name ?

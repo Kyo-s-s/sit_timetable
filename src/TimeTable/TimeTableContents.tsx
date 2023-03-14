@@ -3,6 +3,7 @@ import { Alert, Container, Table } from "react-bootstrap";
 import { Lecture, lectureNone, periodList, periodNum, weekList, weekNum, weekToStr } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
 import { TimeTableCredit } from "./TimeTableCredit";
+import { CardColor } from "./CardColor";
 
 
 export const TimeTableContents = (
@@ -27,6 +28,8 @@ export const TimeTableContents = (
 
   const [alert, setAlert] = React.useState(true);
   const [alert2022, setAlert2022] = React.useState(true);
+
+  const cardColor = new CardColor(lectures);
 
   return (
     <div style={{ display: show ? "block" : "none" }}>
@@ -61,6 +64,7 @@ export const TimeTableContents = (
                           week: week,
                           period: period,
                           lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period })),
+                          cardColor: cardColor,
                           onSelect: (lecture: Lecture) => { onSelect(week, period, lecture) },
                         })}
                       </td>
