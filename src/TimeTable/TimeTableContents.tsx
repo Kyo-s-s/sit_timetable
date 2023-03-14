@@ -76,8 +76,8 @@ export const TimeTableContents = (
           </tbody>
         </Table>
       </Container>
-      {TimeTableCredit(lectures, selectedLecture)}
-      {obtained && TimeTableCredit(lectures, selectedLecture, obtained)}
+      {TimeTableCredit(lectures, selectedLecture, cardColor)}
+      {obtained && TimeTableCredit(lectures, selectedLecture, cardColor, obtained)}
     </div>
   )
 };

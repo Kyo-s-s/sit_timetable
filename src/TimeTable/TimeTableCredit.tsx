@@ -1,10 +1,16 @@
 import React from 'react';
 import { Container, Row, Table } from 'react-bootstrap';
+import { CardColor } from './CardColor';
 import { Lecture, lectureNone } from './Lecture';
 
 type Credits = { [key: string]: number };
 
-export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][], obtained: { [key: string]: number } = {}) => {
+export const TimeTableCredit = (
+  lectures: Lecture[], 
+  selectedLecture: Lecture[][], 
+  cardColor: CardColor,
+  obtained: { [key: string]: number } = {}
+) => {
   let credits: Credits = {};
   for (let lecture of lectures) {
     if (lecture.name === lectureNone.name) continue;
@@ -28,7 +34,9 @@ export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][
               <tr>
                 {
                   Object.keys(credits).map((key, _) => {
-                    return <th>{key}</th>
+                    return <th style = {{ backgroundColor: cardColor.getColor(key) }}>
+                      {key}
+                    </th>
                   })
                 }
                 <th>総和</th>
@@ -38,7 +46,9 @@ export const TimeTableCredit = (lectures: Lecture[], selectedLecture: Lecture[][
               <tr>
                 {
                   Object.keys(credits).map((key, _) => {
-                    return <td>{credits[key] + (obtained[key] ?? 0)}</td>
+                    return <td>
+                      {credits[key] + (obtained[key] ?? 0)}
+                    </td>
                   })
                 }
                 <td>
