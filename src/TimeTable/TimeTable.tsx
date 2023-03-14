@@ -46,7 +46,7 @@ const checkGrade = (grade: string): boolean => {
 };
 
 export const TimeTable = () => {
-  let selectedLecture: Lecture[][] =  [];
+  let selectedLecture: Lecture[][] = [];
   for (let i = 0; i < weekNum; i++) {
     selectedLecture.push([]);
     for (let j = 0; j < periodNum; j++) {
@@ -58,20 +58,20 @@ export const TimeTable = () => {
   const [year, setYear] = React.useState<Year | undefined>();
   const [semester, setSemester] = React.useState<Semester | undefined>();
   const [creditData, setCreditData] = React.useState<creditJson[] | undefined>();
-  
+
   const departmentOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDepartment(keyData.departments.find((dep, _) => dep.name === e.target.value ));
+    setDepartment(keyData.departments.find((dep, _) => dep.name === e.target.value));
     setYear(undefined);
     setSemester(undefined);
   };
 
   const yearOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setYear(department?.years.find((year, _) => year.year === e.target.value ));
+    setYear(department?.years.find((year, _) => year.year === e.target.value));
     setSemester(undefined);
   };
-  
+
   const semesterOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSemester(year?.semesters.find((seme, _) => seme.semester === e.target.value ));
+    setSemester(year?.semesters.find((seme, _) => seme.semester === e.target.value));
   };
 
   const creditFileOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,9 +82,9 @@ export const TimeTable = () => {
       })
     }
   };
-  
+
   const generateLectures = (): Lecture[] => {
-    let lectures: Lecture[] = [lectureNone];   
+    let lectures: Lecture[] = [lectureNone];
     if (semester) {
       semester.files.forEach((file, _) => {
         const data = require("../Data/" + file);
@@ -105,7 +105,9 @@ export const TimeTable = () => {
     let result: Lecture[] = [];
     lectures.forEach((lec, _) => {
       if (
-        result.filter((res, _) => res.name === lec.name && res.week === lec.week && res.period === lec.period).length === 0
+        result.filter((res, _) => {
+          return res.name === lec.name && res.week === lec.week && res.period === lec.period && res.category === lec.category;
+        }).length === 0
         && (creditData === undefined || creditData.find((credit, _) => checkGrade(credit.grade) && credit.name === lec.name) === undefined)
       ) {
         result.push(lec);
@@ -134,38 +136,38 @@ export const TimeTable = () => {
 
   return (
     <>
-      <Modal show = {show}>
+      <Modal show={show}>
         <Modal.Header>
           <Modal.Title>Select Department/Year/Semester</Modal.Title>
         </Modal.Header>
-        <div className = "p-2">
-          <Form.Select className = "my-2" onChange = {e => departmentOnChange(e)}>
+        <div className="p-2">
+          <Form.Select className="my-2" onChange={e => departmentOnChange(e)}>
             <option hidden>Department</option>
             {
-              keyData.departments.map((department, _) => <option value = {department.name}>{department.name}</option>)
+              keyData.departments.map((department, _) => <option value={department.name}>{department.name}</option>)
             }
           </Form.Select>
-          <Form.Select className = "mb-2" onChange = {e => yearOnChange(e)}>
+          <Form.Select className="mb-2" onChange={e => yearOnChange(e)}>
             <option hidden>Year</option>
             {
               department &&
-              department.years.map((year, _) => <option key = {department?.name + year.year} value = {year.year}>{year.year}</option>)
+              department.years.map((year, _) => <option key={department?.name + year.year} value={year.year}>{year.year}</option>)
             }
           </Form.Select>
-          <Form.Select className="mb-2" onChange = {e => semesterOnChange(e)}>
+          <Form.Select className="mb-2" onChange={e => semesterOnChange(e)}>
             <option hidden>Semester</option>
             {
               year &&
-              year.semesters.map((semester, _) => <option key = {department?.name + year?.year + semester.semester} value = {semester.semester}>{semester.semester}</option>)
+              year.semesters.map((semester, _) => <option key={department?.name + year?.year + semester.semester} value={semester.semester}>{semester.semester}</option>)
             }
           </Form.Select>
-            <Form.Label className="mt-1">
-              optional: your credit file (How to get: <a href="https://sit-graduation-checker.ecto0310.com/usage">here</a>)
-            </Form.Label>
-          <Form.Control type="file" accept="application/json" onChange={creditFileOnChange}/>
+          <Form.Label className="mt-1">
+            optional: your credit file (How to get: <a href="https://sit-graduation-checker.ecto0310.com/usage">here</a>)
+          </Form.Label>
+          <Form.Control type="file" accept="application/json" onChange={creditFileOnChange} />
         </div>
         <Modal.Footer>
-          <Button disabled = {semester === undefined} onClick = {() => setShow(false)}>Done</Button>
+          <Button disabled={semester === undefined} onClick={() => setShow(false)}>Done</Button>
         </Modal.Footer>
       </Modal>
       {

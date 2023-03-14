@@ -7,7 +7,7 @@ import { CardColor } from "./CardColor";
 
 
 export const TimeTableContents = (
-  show: boolean, 
+  show: boolean,
   lectures: Lecture[],
   obtained: { [key: string]: number } | undefined
 ) => {
@@ -53,7 +53,7 @@ export const TimeTableContents = (
             {
               periodList.map((period, _) => {
                 return <tr>
-                  <td className="text-center" style = {{ verticalAlign: "middle" }}>
+                  <td className="text-center" style={{ verticalAlign: "middle" }}>
                     <h5>{"Period" + period}</h5>
                   </td>
                   {
