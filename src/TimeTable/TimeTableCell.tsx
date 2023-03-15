@@ -84,7 +84,7 @@ export const TimeTableCell = (props: Props) => {
             props.onSelect(selectedLecture);
             handleClose();
           }}>
-            Done
+            Add
           </Button>
         </Modal.Footer>
       </Modal>

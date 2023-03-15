@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Button, Card, Form, Modal } from "react-bootstrap";
 import { Lecture, weekToStr } from "./Lecture";
@@ -36,7 +38,9 @@ export const Search = (
         </Modal.Body>
       </Modal >
 
-      <Button onClick={() => setShow(true)}>Search</Button>
+      <div onClick={() => setShow(true)}>
+        <FontAwesomeIcon icon={faSearch} />
+      </div>
     </>
   )
 }
