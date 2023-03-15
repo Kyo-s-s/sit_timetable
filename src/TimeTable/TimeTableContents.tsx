@@ -4,6 +4,7 @@ import { Lecture, lectureNone, periodList, periodNum, weekList, weekNum, weekToS
 import { TimeTableCell } from "./TimeTableCell";
 import { TimeTableCredit } from "./TimeTableCredit";
 import { CardColor } from "./CardColor";
+import { Search } from "./Search";
 
 
 export const TimeTableContents = (
@@ -43,7 +44,7 @@ export const TimeTableContents = (
         <Table borderless style={{ tableLayout: "fixed" }}>
           <tbody>
             <tr>
-              <td></td>
+              <td className="text-center">{Search(lectures, onSelect)}</td>
               {
                 weekList.map((week, _) => {
                   return <td className="text-center"><h5>{weekToStr(week)}</h5></td>

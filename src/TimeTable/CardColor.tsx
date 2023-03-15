@@ -1,4 +1,3 @@
-import React from 'react';
 import { Lecture, lectureNone } from './Lecture';
 
 export class CardColor {
