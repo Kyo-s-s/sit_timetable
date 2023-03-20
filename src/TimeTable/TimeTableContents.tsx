@@ -8,7 +8,6 @@ import { Search } from "./Search";
 
 
 export const TimeTableContents = (
-  show: boolean,
   lectures: Lecture[],
   obtained: { [key: string]: number } | undefined
 ) => {
@@ -27,20 +26,11 @@ export const TimeTableContents = (
     setSelectedLecture(selectedLecture);
   };
 
-  const [alert, setAlert] = React.useState(true);
-  const [alert2022, setAlert2022] = React.useState(true);
-
   const cardColor = new CardColor(lectures);
 
   return (
-    <div style={{ display: show ? "block" : "none" }}>
+    <div>
       <Container className="py-4">
-        <Alert variant="danger" onClose={() => setAlert(false)} show={alert} dismissible>
-          時間割や取得予定単位数は参考値です。万が一誤りがあった場合でも、一切の責任を負いません。
-        </Alert>
-        <Alert variant="danger" onClose={() => setAlert2022(false)} show={alert2022} dismissible>
-          これは2022年度の時間割です。2023年度の時間割は未定です。公開され次第更新します。
-        </Alert>
         <Table borderless style={{ tableLayout: "fixed" }}>
           <tbody>
             <tr>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Tabs, Tab, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
 import { Lecture, lectureNone, periodNum, toLecture, weekNum } from "./Lecture";
@@ -170,9 +170,19 @@ export const TimeTable = () => {
           <Button disabled={semester === undefined} onClick={() => setShow(false)}>Done</Button>
         </Modal.Footer>
       </Modal>
-      {
-        TimeTableContents(!show, generateLectures(), generateObtained())
-      }
+
+      <Container>
+        <Tabs>
+          <Tab eventKey="table" title="Time Table">
+            {
+              TimeTableContents(generateLectures(), generateObtained())
+            }
+          </Tab>
+          <Tab eventKey="credit" title="Credit">
+            hogehoge
+          </Tab>
+        </Tabs>
+      </Container>
     </>
   )
 }
