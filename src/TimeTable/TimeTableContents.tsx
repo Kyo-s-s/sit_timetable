@@ -9,24 +9,11 @@ import { Search } from "./Search";
 
 export const TimeTableContents = (
   lectures: Lecture[],
+  selectedLecture: Lecture[][],
+  onSelect: (week: number, period: number, lecture: Lecture) => void,
+  cardColor: CardColor,
   obtained: { [key: string]: number } | undefined
 ) => {
-  let _selectedLecture: Lecture[][] = [];
-  for (let i = 0; i < weekNum; i++) {
-    _selectedLecture.push([]);
-    for (let j = 0; j < periodNum; j++) {
-      _selectedLecture[i].push(lectureNone);
-    }
-  }
-
-  const [selectedLecture, setSelectedLecture] = React.useState(_selectedLecture);
-
-  const onSelect = (week: number, period: number, lecture: Lecture) => {
-    selectedLecture[week][period] = lecture;
-    setSelectedLecture(selectedLecture);
-  };
-
-  const cardColor = new CardColor(lectures);
 
   return (
     <div>
@@ -67,8 +54,6 @@ export const TimeTableContents = (
           </tbody>
         </Table>
       </Container>
-      {TimeTableCredit(lectures, selectedLecture, cardColor)}
-      {obtained && TimeTableCredit(lectures, selectedLecture, cardColor, obtained)}
     </div>
   )
 };

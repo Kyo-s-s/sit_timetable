@@ -2,8 +2,10 @@ import React from "react";
 import { Button, Modal, Tabs, Tab, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
+import { CardColor } from "./CardColor";
 import { Lecture, lectureNone, periodNum, toLecture, weekNum } from "./Lecture";
 import { TimeTableContents } from "./TimeTableContents";
+import { TimeTableCredit } from "./TimeTableCredit";
 
 type Semester = {
   semester: string,
@@ -46,18 +48,29 @@ const checkGrade = (grade: string): boolean => {
 };
 
 export const TimeTable = () => {
-  let selectedLecture: Lecture[][] = [];
-  for (let i = 0; i < weekNum; i++) {
-    selectedLecture.push([]);
-    for (let j = 0; j < periodNum; j++) {
-      selectedLecture[i].push(lectureNone);
-    }
-  }
-
   const [department, setDepartment] = React.useState<Department | undefined>();
   const [year, setYear] = React.useState<Year | undefined>();
   const [semester, setSemester] = React.useState<Semester | undefined>();
   const [creditData, setCreditData] = React.useState<creditJson[] | undefined>();
+
+  let _selectedLecture: Lecture[][] = [];
+  for (let i = 0; i < weekNum; i++) {
+    _selectedLecture.push([]);
+    for (let j = 0; j < periodNum; j++) {
+      _selectedLecture[i].push(lectureNone);
+    }
+  }
+
+  const [selectedLecture, setSelectedLecture] = React.useState(_selectedLecture);
+  const onSelect = (week: number, period: number, lecture: Lecture) => {
+    selectedLecture[week][period] = lecture;
+    setSelectedLecture(selectedLecture);
+  };
+
+  const [lectures, setLectures] = React.useState<Lecture[]>([lectureNone]);
+  const [cardColor, setCardColor] = React.useState<CardColor>(new CardColor([lectureNone]));
+
+  const [obtained, setObtained] = React.useState<{ [key: string]: number } | undefined>(undefined);
 
   const departmentOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDepartment(keyData.departments.find((dep, _) => dep.name === e.target.value));
@@ -83,7 +96,7 @@ export const TimeTable = () => {
     }
   };
 
-  const generateLectures = (): Lecture[] => {
+  const generateLectures = () => {
     let lectures: Lecture[] = [lectureNone];
     if (semester) {
       semester.files.forEach((file, _) => {
@@ -113,11 +126,13 @@ export const TimeTable = () => {
         result.push(lec);
       }
     });
-    return result
+    setLectures(result);
+    return result;
   };
 
   const generateObtained = (): { [key: string]: number } | undefined => {
     if (creditData === undefined) {
+      setObtained(undefined);
       return undefined;
     }
     let result: { [key: string]: number } = {};
@@ -129,8 +144,16 @@ export const TimeTable = () => {
         result[credit.group] += credit.count;
       }
     })
+    setObtained(result);
     return result;
   }
+
+  const onDone = () => {
+    let lecs = generateLectures();
+    setCardColor(new CardColor(lecs));
+    generateObtained();
+    setShow(false);
+  };
 
   const [show, setShow] = React.useState(true);
 
@@ -167,7 +190,7 @@ export const TimeTable = () => {
           <Form.Control type="file" accept="application/json" onChange={creditFileOnChange} />
         </div>
         <Modal.Footer>
-          <Button disabled={semester === undefined} onClick={() => setShow(false)}>Done</Button>
+          <Button disabled={semester === undefined} onClick={onDone}>Done</Button>
         </Modal.Footer>
       </Modal>
 
@@ -175,11 +198,32 @@ export const TimeTable = () => {
         <Tabs>
           <Tab eventKey="table" title="Time Table">
             {
-              TimeTableContents(generateLectures(), generateObtained())
+              TimeTableContents(
+                lectures,
+                selectedLecture,
+                onSelect,
+                cardColor,
+                obtained
+              )
             }
           </Tab>
           <Tab eventKey="credit" title="Credit">
-            hogehoge
+            {
+              TimeTableCredit(
+                lectures,
+                selectedLecture,
+                cardColor
+              )
+            }
+            {
+              obtained &&
+              TimeTableCredit(
+                lectures,
+                selectedLecture,
+                cardColor,
+                obtained
+              )
+            }
           </Tab>
         </Tabs>
       </Container>
