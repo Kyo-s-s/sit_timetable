@@ -9,7 +9,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 export const SelectedOthers = (
   lectures: Lecture[],
   selectedLecture: SelectedLecture,
-  setSelectedLecture: React.Dispatch<React.SetStateAction<SelectedLecture>>,
+  setSelectedLecture: (selectedLecture: SelectedLecture) => void,
   selectLec: (lec: Lecture) => void,
   cardColor: CardColor
 ) => {
