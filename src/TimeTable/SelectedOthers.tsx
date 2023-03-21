@@ -1,6 +1,6 @@
 import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Card, CloseButton, Container, Form, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap"
+import { Button, Card, Container, Form, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap"
 import { CardColor } from "./CardColor"
 import { Lecture, lectureNone, Week } from "./Lecture"
 import { SelectedLecture } from "./TimeTable"

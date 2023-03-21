@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal, Tabs, Tab, Container } from "react-bootstrap";
+import { Button, Modal, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
 import { CardColor } from "./CardColor";
