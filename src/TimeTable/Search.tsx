@@ -39,7 +39,10 @@ export const Search = (
       </Modal >
 
       <div onClick={() => setShow(true)}>
-        <FontAwesomeIcon icon={faSearch} />
+        <h5>
+          <FontAwesomeIcon icon={faSearch} className="mx-1" />
+          Search
+        </h5>
       </div>
     </>
   )

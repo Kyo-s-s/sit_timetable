@@ -3,7 +3,8 @@ import { Button, Modal, Tabs, Tab, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
 import { CardColor } from "./CardColor";
-import { Lecture, lectureNone, periodNum, toLecture, weekNum } from "./Lecture";
+import { Lecture, lectureNone, periodNum, toLecture, Week, weekNum } from "./Lecture";
+import { SelectedOthers } from "./SelectedOthers";
 import { TimeTableContents } from "./TimeTableContents";
 import { TimeTableCredit } from "./TimeTableCredit";
 
@@ -66,13 +67,22 @@ export const TimeTable = () => {
     }
   }
 
+  // これをそのままOthers描画に渡す
   const [selectedLecture, setSelectedLecture] = React.useState<SelectedLecture>({ table: _selectedLecture, others: [] });
   const oneSelectLecTable = (week: number, period: number, lecture: Lecture) => {
     selectedLecture.table[week][period] = lecture;
     setSelectedLecture(selectedLecture);
   };
 
-  const selectLecTable = (lecture: Lecture) => {
+  const selectLec = (lecture: Lecture) => {
+    if (lecture.week === Week.Others) {
+      if (selectedLecture.others.find((lec, _) => lec.name === lecture.name)) {
+        return;
+      }
+      selectedLecture.others.push(lecture);
+      setSelectedLecture(selectedLecture);
+      return;
+    }
     for (let i = 0; i < lecture.time; i++) {
       const lec = Object.assign({}, lecture);
       if (i > 0) {
@@ -214,13 +224,22 @@ export const TimeTable = () => {
               TimeTableContents(
                 lectures,
                 selectedLecture,
-                selectLecTable,
+                selectLec,
                 cardColor,
                 obtained
               )
             }
           </Tab>
           <Tab eventKey="credit" title="Credit">
+            {
+              SelectedOthers(
+                lectures,
+                selectedLecture,
+                setSelectedLecture,
+                selectLec,
+                cardColor
+              )
+            }
             <h3 className="m-2">今期の取得予定単位数の総和</h3>
             {
               TimeTableCredit(

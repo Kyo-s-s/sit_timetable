@@ -1,8 +1,7 @@
 import React from "react";
-import { Alert, Container, Table } from "react-bootstrap";
-import { Lecture, lectureNone, periodList, periodNum, weekList, weekNum, weekToStr } from "./Lecture";
+import { Container, Table } from "react-bootstrap";
+import { Lecture, lectureNone, periodList, weekList, weekToStr } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
-import { TimeTableCredit } from "./TimeTableCredit";
 import { CardColor } from "./CardColor";
 import { Search } from "./Search";
 import { SelectedLecture } from "./TimeTable";
