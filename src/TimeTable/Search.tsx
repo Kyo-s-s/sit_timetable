@@ -6,7 +6,7 @@ import { Lecture, weekToStr } from "./Lecture";
 
 export const Search = (
   lectures: Lecture[],
-  updateSelectedLec: (week: number, period: number, lec: Lecture) => void
+  updateSelectedLec: (lec: Lecture) => void
 ) => {
   const [show, setShow] = React.useState(false);
   const [searchStr, setSearchStr] = React.useState<string>("");
@@ -47,25 +47,11 @@ export const Search = (
 
 const SearchCard = (
   lec: Lecture,
-  updateSelectedLec: (week: number, period: number, lec: Lecture) => void,
+  updateSelectedLec: (lec: Lecture) => void,
   closeModal: () => void
 ) => {
-  const cloneLecture = (creditZero: boolean): Lecture => {
-    const newLec = Object.assign({}, lec);
-    if (creditZero) {
-      newLec.credit = 0;
-    }
-    return newLec;
-  };
-
   const updateLec = () => {
-    for (let i = 0; i < lec.time; i++) {
-      updateSelectedLec(
-        lec.week,
-        lec.period + i,
-        cloneLecture(i !== 0)
-      );
-    }
+    updateSelectedLec(lec);
     closeModal();
   };
 

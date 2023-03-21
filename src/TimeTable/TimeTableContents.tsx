@@ -5,12 +5,13 @@ import { TimeTableCell } from "./TimeTableCell";
 import { TimeTableCredit } from "./TimeTableCredit";
 import { CardColor } from "./CardColor";
 import { Search } from "./Search";
+import { SelectedLecture } from "./TimeTable";
 
 
 export const TimeTableContents = (
   lectures: Lecture[],
-  selectedLecture: Lecture[][],
-  onSelect: (week: number, period: number, lecture: Lecture) => void,
+  selectedLecture: SelectedLecture,
+  onSelect: (lecture: Lecture) => void,
   cardColor: CardColor,
   obtained: { [key: string]: number } | undefined
 ) => {
@@ -38,12 +39,12 @@ export const TimeTableContents = (
                     weekList.map((week, _) => {
                       return <td className="p-1">
                         {TimeTableCell({
-                          nowSelect: selectedLecture[week][period],
+                          nowSelect: selectedLecture.table[week][period],
                           week: week,
                           period: period,
                           lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period })),
                           cardColor: cardColor,
-                          onSelect: (lecture: Lecture) => { onSelect(week, period, lecture) },
+                          onSelect: onSelect,
                         })}
                       </td>
                     })

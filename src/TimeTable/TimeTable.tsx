@@ -42,6 +42,11 @@ type creditJson = {
   period: string,
 }
 
+export type SelectedLecture = {
+  table: Lecture[][],
+  others: Lecture[],
+}
+
 const checkGrade = (grade: string): boolean => {
   const accept = ["S", "A", "B", "C", "N"];
   return accept.includes(grade);
@@ -61,10 +66,20 @@ export const TimeTable = () => {
     }
   }
 
-  const [selectedLecture, setSelectedLecture] = React.useState(_selectedLecture);
-  const onSelect = (week: number, period: number, lecture: Lecture) => {
-    selectedLecture[week][period] = lecture;
+  const [selectedLecture, setSelectedLecture] = React.useState<SelectedLecture>({ table: _selectedLecture, others: [] });
+  const oneSelectLecTable = (week: number, period: number, lecture: Lecture) => {
+    selectedLecture.table[week][period] = lecture;
     setSelectedLecture(selectedLecture);
+  };
+
+  const selectLecTable = (lecture: Lecture) => {
+    for (let i = 0; i < lecture.time; i++) {
+      const lec = Object.assign({}, lecture);
+      if (i > 0) {
+        lec.credit = 0;
+      }
+      oneSelectLecTable(lec.week, lec.period + i, lec);
+    }
   };
 
   const [lectures, setLectures] = React.useState<Lecture[]>([lectureNone]);
@@ -102,16 +117,14 @@ export const TimeTable = () => {
       semester.files.forEach((file, _) => {
         const data = require("../Data/" + file);
         data.lectures.forEach((lecture: lectureJson) => {
-          for (let i = 0; i < lecture.time; i++) {
-            lectures.push(toLecture(
-              lecture.name,
-              lecture.week,
-              lecture.period + i,
-              i === 0 ? lecture.credit : 0,
-              lecture.division,
-              lecture.time
-            ))
-          }
+          lectures.push(toLecture(
+            lecture.name,
+            lecture.week,
+            lecture.period,
+            lecture.credit,
+            lecture.division,
+            lecture.time
+          ));
         });
       });
     }
@@ -201,13 +214,14 @@ export const TimeTable = () => {
               TimeTableContents(
                 lectures,
                 selectedLecture,
-                onSelect,
+                selectLecTable,
                 cardColor,
                 obtained
               )
             }
           </Tab>
           <Tab eventKey="credit" title="Credit">
+            <h3 className="m-2">今期の取得予定単位数の総和</h3>
             {
               TimeTableCredit(
                 lectures,
@@ -215,14 +229,17 @@ export const TimeTable = () => {
                 cardColor
               )
             }
-            {
-              obtained &&
-              TimeTableCredit(
-                lectures,
-                selectedLecture,
-                cardColor,
-                obtained
-              )
+            {obtained && <>
+              <h3 className="m-2">今までの単位数と取得予定単位数の総和</h3>
+              {
+                TimeTableCredit(
+                  lectures,
+                  selectedLecture,
+                  cardColor,
+                  obtained
+                )
+              }
+            </>
             }
           </Tab>
         </Tabs>
