@@ -1,46 +1,23 @@
 import React from "react";
-import { Alert, Container, Table } from "react-bootstrap";
-import { Lecture, lectureNone, periodList, periodNum, weekList, weekNum, weekToStr } from "./Lecture";
+import { Container, Table } from "react-bootstrap";
+import { Lecture, lectureNone, periodList, Week, Period, weekList, weekToStr } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
-import { TimeTableCredit } from "./TimeTableCredit";
 import { CardColor } from "./CardColor";
 import { Search } from "./Search";
+import { SelectedLecture } from "./TimeTable";
 
 
 export const TimeTableContents = (
-  show: boolean,
   lectures: Lecture[],
-  obtained: { [key: string]: number } | undefined
+  selectedLecture: SelectedLecture,
+  onSelect: (lecture: Lecture) => void,
+  cardColor: CardColor,
+  setNull: (week: Week, period: Period) => void,
 ) => {
-  let _selectedLecture: Lecture[][] = [];
-  for (let i = 0; i < weekNum; i++) {
-    _selectedLecture.push([]);
-    for (let j = 0; j < periodNum; j++) {
-      _selectedLecture[i].push(lectureNone);
-    }
-  }
-
-  const [selectedLecture, setSelectedLecture] = React.useState(_selectedLecture);
-
-  const onSelect = (week: number, period: number, lecture: Lecture) => {
-    selectedLecture[week][period] = lecture;
-    setSelectedLecture(selectedLecture);
-  };
-
-  const [alert, setAlert] = React.useState(true);
-  const [alert2022, setAlert2022] = React.useState(true);
-
-  const cardColor = new CardColor(lectures);
 
   return (
-    <div style={{ display: show ? "block" : "none" }}>
-      <Container className="py-4">
-        <Alert variant="danger" onClose={() => setAlert(false)} show={alert} dismissible>
-          時間割や取得予定単位数は参考値です。万が一誤りがあった場合でも、一切の責任を負いません。
-        </Alert>
-        <Alert variant="danger" onClose={() => setAlert2022(false)} show={alert2022} dismissible>
-          これは2022年度の時間割です。2023年度の時間割は未定です。公開され次第更新します。
-        </Alert>
+    <div>
+      <Container className="pt-4">
         <Table borderless style={{ tableLayout: "fixed" }}>
           <tbody>
             <tr>
@@ -61,12 +38,13 @@ export const TimeTableContents = (
                     weekList.map((week, _) => {
                       return <td className="p-1">
                         {TimeTableCell({
-                          nowSelect: selectedLecture[week][period],
+                          nowSelect: selectedLecture.table[week][period],
                           week: week,
                           period: period,
                           lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period })),
                           cardColor: cardColor,
-                          onSelect: (lecture: Lecture) => { onSelect(week, period, lecture) },
+                          onSelect: onSelect,
+                          setNull: setNull,
                         })}
                       </td>
                     })
@@ -77,8 +55,6 @@ export const TimeTableContents = (
           </tbody>
         </Table>
       </Container>
-      {TimeTableCredit(lectures, selectedLecture, cardColor)}
-      {obtained && TimeTableCredit(lectures, selectedLecture, cardColor, obtained)}
     </div>
   )
 };

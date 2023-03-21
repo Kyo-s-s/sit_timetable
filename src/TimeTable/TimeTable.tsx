@@ -1,9 +1,12 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
-import { Lecture, lectureNone, periodNum, toLecture, weekNum } from "./Lecture";
+import { CardColor } from "./CardColor";
+import { Lecture, lectureNone, Period, periodNum, toLecture, Week, weekNum } from "./Lecture";
+import { SelectedOthers } from "./SelectedOthers";
 import { TimeTableContents } from "./TimeTableContents";
+import { TimeTableCredit } from "./TimeTableCredit";
 
 type Semester = {
   semester: string,
@@ -40,24 +43,63 @@ type creditJson = {
   period: string,
 }
 
+export type SelectedLecture = {
+  table: Lecture[][],
+  others: Lecture[],
+}
+
 const checkGrade = (grade: string): boolean => {
   const accept = ["S", "A", "B", "C", "N"];
   return accept.includes(grade);
 };
 
 export const TimeTable = () => {
-  let selectedLecture: Lecture[][] = [];
-  for (let i = 0; i < weekNum; i++) {
-    selectedLecture.push([]);
-    for (let j = 0; j < periodNum; j++) {
-      selectedLecture[i].push(lectureNone);
-    }
-  }
-
   const [department, setDepartment] = React.useState<Department | undefined>();
   const [year, setYear] = React.useState<Year | undefined>();
   const [semester, setSemester] = React.useState<Semester | undefined>();
   const [creditData, setCreditData] = React.useState<creditJson[] | undefined>();
+
+  let _selectedLecture: Lecture[][] = [];
+  for (let i = 0; i < weekNum; i++) {
+    _selectedLecture.push([]);
+    for (let j = 0; j < periodNum; j++) {
+      _selectedLecture[i].push(lectureNone);
+    }
+  }
+
+  // これをそのままOthers描画に渡す
+  const [selectedLecture, setSelectedLecture] = React.useState<SelectedLecture>({ table: _selectedLecture, others: [] });
+  const oneSelectLecTable = (week: number, period: number, lecture: Lecture) => {
+    selectedLecture.table[week][period] = lecture;
+    setSelectedLecture(selectedLecture);
+  };
+
+  const selectLec = (lecture: Lecture) => {
+    if (lecture.week === Week.Others) {
+      if (selectedLecture.others.find((lec, _) => lec.name === lecture.name)) {
+        return;
+      }
+      selectedLecture.others.push(lecture);
+      setSelectedLecture(selectedLecture);
+      return;
+    }
+    for (let i = 0; i < lecture.time; i++) {
+      const lec = Object.assign({}, lecture);
+      if (i > 0) {
+        lec.credit = 0;
+      }
+      oneSelectLecTable(lec.week, lec.period + i, lec);
+    }
+  };
+  const setNull = (week: Week, period: Period) => {
+    selectedLecture.table[week][period] = lectureNone;
+    setSelectedLecture(selectedLecture);
+  };
+
+  const [lectures, setLectures] = React.useState<Lecture[]>([lectureNone]);
+  const [cardColor, setCardColor] = React.useState<CardColor>(new CardColor([lectureNone]));
+
+  const [obtained, setObtained] = React.useState<{ [key: string]: number } | undefined>(undefined);
 
   const departmentOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDepartment(keyData.departments.find((dep, _) => dep.name === e.target.value));
@@ -83,22 +125,20 @@ export const TimeTable = () => {
     }
   };
 
-  const generateLectures = (): Lecture[] => {
+  const generateLectures = () => {
     let lectures: Lecture[] = [lectureNone];
     if (semester) {
       semester.files.forEach((file, _) => {
         const data = require("../Data/" + file);
         data.lectures.forEach((lecture: lectureJson) => {
-          for (let i = 0; i < lecture.time; i++) {
-            lectures.push(toLecture(
-              lecture.name,
-              lecture.week,
-              lecture.period + i,
-              i === 0 ? lecture.credit : 0,
-              lecture.division,
-              lecture.time
-            ))
-          }
+          lectures.push(toLecture(
+            lecture.name,
+            lecture.week,
+            lecture.period,
+            lecture.credit,
+            lecture.division,
+            lecture.time
+          ));
         });
       });
     }
@@ -113,11 +153,13 @@ export const TimeTable = () => {
         result.push(lec);
       }
     });
-    return result
+    setLectures(result);
+    return result;
   };
 
   const generateObtained = (): { [key: string]: number } | undefined => {
     if (creditData === undefined) {
+      setObtained(undefined);
       return undefined;
     }
     let result: { [key: string]: number } = {};
@@ -129,8 +171,16 @@ export const TimeTable = () => {
         result[credit.group] += credit.count;
       }
     })
+    setObtained(result);
     return result;
   }
+
+  const onDone = () => {
+    let lecs = generateLectures();
+    setCardColor(new CardColor(lecs));
+    generateObtained();
+    setShow(false);
+  };
 
   const [show, setShow] = React.useState(true);
 
@@ -167,12 +217,50 @@ export const TimeTable = () => {
           <Form.Control type="file" accept="application/json" onChange={creditFileOnChange} />
         </div>
         <Modal.Footer>
-          <Button disabled={semester === undefined} onClick={() => setShow(false)}>Done</Button>
+          <Button disabled={semester === undefined} onClick={onDone}>Done</Button>
         </Modal.Footer>
       </Modal>
-      {
-        TimeTableContents(!show, generateLectures(), generateObtained())
-      }
+
+      <Container>
+        {
+          TimeTableContents(
+            lectures,
+            selectedLecture,
+            selectLec,
+            cardColor,
+            setNull
+          )
+        }
+        {
+          SelectedOthers(
+            lectures,
+            selectedLecture,
+            setSelectedLecture,
+            selectLec,
+            cardColor
+          )
+        }
+        <h3 className="m-2">今期の取得予定単位数の総和</h3>
+        {
+          TimeTableCredit(
+            lectures,
+            selectedLecture,
+            cardColor
+          )
+        }
+        {obtained && <>
+          <h3 className="m-2">今までの単位数と取得予定単位数の総和</h3>
+          {
+            TimeTableCredit(
+              lectures,
+              selectedLecture,
+              cardColor,
+              obtained
+            )
+          }
+        </>
+        }
+      </Container>
     </>
   )
 }
