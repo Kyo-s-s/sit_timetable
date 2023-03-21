@@ -3,7 +3,7 @@ import { Button, Modal, Tabs, Tab, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import keyData from "../Data/data.json"
 import { CardColor } from "./CardColor";
-import { Lecture, lectureNone, periodNum, toLecture, Week, weekNum } from "./Lecture";
+import { Lecture, lectureNone, Period, periodNum, toLecture, Week, weekNum } from "./Lecture";
 import { SelectedOthers } from "./SelectedOthers";
 import { TimeTableContents } from "./TimeTableContents";
 import { TimeTableCredit } from "./TimeTableCredit";
@@ -90,6 +90,10 @@ export const TimeTable = () => {
       }
       oneSelectLecTable(lec.week, lec.period + i, lec);
     }
+  };
+  const setNull = (week: Week, period: Period) => {
+    selectedLecture.table[week][period] = lectureNone;
+    setSelectedLecture(selectedLecture);
   };
 
   const [lectures, setLectures] = React.useState<Lecture[]>([lectureNone]);
@@ -224,7 +228,7 @@ export const TimeTable = () => {
             selectedLecture,
             selectLec,
             cardColor,
-            obtained
+            setNull
           )
         }
         {

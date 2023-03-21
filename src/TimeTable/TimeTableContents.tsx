@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Table } from "react-bootstrap";
-import { Lecture, lectureNone, periodList, weekList, weekToStr } from "./Lecture";
+import { Lecture, lectureNone, periodList, Week, Period, weekList, weekToStr } from "./Lecture";
 import { TimeTableCell } from "./TimeTableCell";
 import { CardColor } from "./CardColor";
 import { Search } from "./Search";
@@ -12,7 +12,7 @@ export const TimeTableContents = (
   selectedLecture: SelectedLecture,
   onSelect: (lecture: Lecture) => void,
   cardColor: CardColor,
-  obtained: { [key: string]: number } | undefined
+  setNull: (week: Week, period: Period) => void,
 ) => {
 
   return (
@@ -44,6 +44,7 @@ export const TimeTableContents = (
                           lectures: [lectureNone].concat(lectures.filter((lecture) => { return lecture.week === week && lecture.period === period })),
                           cardColor: cardColor,
                           onSelect: onSelect,
+                          setNull: setNull,
                         })}
                       </td>
                     })

@@ -15,6 +15,7 @@ type Props = {
   lectures: Lecture[];
   cardColor: CardColor;
   onSelect: (lecture: Lecture) => void;
+  setNull: (week: Week, period: Period) => void;
 }
 
 export const TimeTableCell = (props: Props) => {
@@ -81,7 +82,11 @@ export const TimeTableCell = (props: Props) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => {
-            props.onSelect(selectedLecture);
+            if (selectedLecture === lectureNone) {
+              props.setNull(props.week, props.period);
+            } else {
+              props.onSelect(selectedLecture);
+            }
             handleClose();
           }}>
             Add
