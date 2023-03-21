@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div className="m-1">
-      <Container className="py-4">
+      <Container className="pt-4">
         <Alert variant="danger" onClose={() => setAlert(false)} show={alert} dismissible>
           時間割や取得予定単位数は参考値です。万が一誤りがあった場合でも、一切の責任を負いません。
         </Alert>

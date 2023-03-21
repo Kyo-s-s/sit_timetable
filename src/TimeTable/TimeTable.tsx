@@ -218,50 +218,44 @@ export const TimeTable = () => {
       </Modal>
 
       <Container>
-        <Tabs>
-          <Tab eventKey="table" title="Time Table">
-            {
-              TimeTableContents(
-                lectures,
-                selectedLecture,
-                selectLec,
-                cardColor,
-                obtained
-              )
-            }
-          </Tab>
-          <Tab eventKey="credit" title="Credit">
-            {
-              SelectedOthers(
-                lectures,
-                selectedLecture,
-                setSelectedLecture,
-                selectLec,
-                cardColor
-              )
-            }
-            <h3 className="m-2">今期の取得予定単位数の総和</h3>
-            {
-              TimeTableCredit(
-                lectures,
-                selectedLecture,
-                cardColor
-              )
-            }
-            {obtained && <>
-              <h3 className="m-2">今までの単位数と取得予定単位数の総和</h3>
-              {
-                TimeTableCredit(
-                  lectures,
-                  selectedLecture,
-                  cardColor,
-                  obtained
-                )
-              }
-            </>
-            }
-          </Tab>
-        </Tabs>
+        {
+          TimeTableContents(
+            lectures,
+            selectedLecture,
+            selectLec,
+            cardColor,
+            obtained
+          )
+        }
+        {
+          SelectedOthers(
+            lectures,
+            selectedLecture,
+            setSelectedLecture,
+            selectLec,
+            cardColor
+          )
+        }
+        <h3 className="m-2">今期の取得予定単位数の総和</h3>
+        {
+          TimeTableCredit(
+            lectures,
+            selectedLecture,
+            cardColor
+          )
+        }
+        {obtained && <>
+          <h3 className="m-2">今までの単位数と取得予定単位数の総和</h3>
+          {
+            TimeTableCredit(
+              lectures,
+              selectedLecture,
+              cardColor,
+              obtained
+            )
+          }
+        </>
+        }
       </Container>
     </>
   )

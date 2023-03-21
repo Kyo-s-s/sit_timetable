@@ -17,7 +17,7 @@ export const TimeTableContents = (
 
   return (
     <div>
-      <Container className="py-4">
+      <Container className="pt-4">
         <Table borderless style={{ tableLayout: "fixed" }}>
           <tbody>
             <tr>
