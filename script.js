@@ -97,8 +97,8 @@ Array.from(document.querySelectorAll("#title"))
             const as = Array.from(tds[1].querySelectorAll("a"));
             as.forEach((a, idx) => {
                 const url = a.href;
-                const filename = block.faculty + " " + division + " " + grade[idx];
-                download(url, filename);
+                const filename = "2023年度 " + block.faculty + "" + division + " " + grade[idx];
+                download(url, filename.trim());
             })
         })
     })
