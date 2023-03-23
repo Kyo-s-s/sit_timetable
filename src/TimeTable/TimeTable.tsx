@@ -1,8 +1,10 @@
 import React from "react";
 import { Button, Modal, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import systemsEngineeringAndScienceData from "../Data/システム理工学部.json"
-import collegeOfEngineering from "../Data/工学部.json"
+import collegeOfEngineeringData from "../Data/工学部.json";
+import systemsEngineeringAndScienceData from "../Data/システム理工学部.json";
+import engieringAndDesignData from "../Data/デザイン工学部.json";
+import schoolOfArchitectureData from "../Data/建築学部.json";
 import { CardColor } from "./CardColor";
 import { Lecture, lectureNone, Period, periodNum, toLecture, Week, weekNum } from "./Lecture";
 import { SelectedOthers } from "./SelectedOthers";
@@ -56,8 +58,10 @@ const checkGrade = (grade: string): boolean => {
 
 export const TimeTable = () => {
   const keyData = {
-    "departments": collegeOfEngineering.departments.concat(
-      systemsEngineeringAndScienceData.departments
+    "departments": collegeOfEngineeringData.departments.concat(
+      systemsEngineeringAndScienceData.departments,
+      engieringAndDesignData.departments,
+      schoolOfArchitectureData.departments
     )
   }
 
