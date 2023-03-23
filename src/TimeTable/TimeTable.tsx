@@ -296,7 +296,7 @@ export const TimeTable = () => {
               keyData &&
               keyData?.departments
                 .map((department, _) => <option key={department.name} value={department.name}>{
-                  department.name.split(" ")[1]
+                  department.name.split(" ").slice(1).join(" ")
                 }</option>)
             }
           </Form.Select>
