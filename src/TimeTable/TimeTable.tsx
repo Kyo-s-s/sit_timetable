@@ -280,7 +280,7 @@ export const TimeTable = () => {
     <>
       <Modal show={show}>
         <Modal.Header>
-          <Modal.Title>Select Department/Year/Semester</Modal.Title>
+          <Modal.Title>Select Faculty/Department/Year/Semester</Modal.Title>
         </Modal.Header>
         <div className="p-2">
           <Form.Select className="my-2" onChange={e => facultyOnChange(e)}>
