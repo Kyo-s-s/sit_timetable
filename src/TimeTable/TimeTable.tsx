@@ -284,47 +284,33 @@ export const TimeTable = () => {
         </Modal.Header>
         <div className="p-2">
           <Form.Select className="my-2" onChange={e => facultyOnChange(e)}>
-            {faculty === undefined ?
-              <option hidden>Faculty</option> :
-              <option value={faculty}>{faculty}</option>
-            }
+            <option hidden>Faculty</option> :
             {
               [Faculty.CollegeOfEngineering, Faculty.SystemsEngineeringAndScience, Faculty.EngineeringAndDesign, Faculty.SchoolOfArchitecture]
-                .filter(fac => fac !== faculty)
                 .map((faculty, _) => <option key={faculty} value={faculty}>{faculty}</option>)
             }
           </Form.Select>
           <Form.Select className="my-2" onChange={e => departmentOnChange(e)}>
-            {department === undefined ?
-              <option hidden>Department</option> :
-              <option value={department.name}>{department.name}</option>
-            }
+            <option hidden>Department</option>
             {
               keyData &&
-              keyData?.departments.filter(dep => dep.name !== department?.name)
+              keyData?.departments
                 .map((department, _) => <option key={department.name} value={department.name}>{department.name}</option>)
             }
           </Form.Select>
           <Form.Select className="mb-2" onChange={e => yearOnChange(e)}>
-            {year === undefined ?
-              <option hidden>Year</option> :
-              <option value={year.year}>{year.year}</option>
-            }
+            <option hidden>Year</option>
             {
               department &&
-              department.years.filter(yea => yea.year !== year?.year)
+              department.years
                 .map((year, _) => <option key={department?.name + year.year} value={year.year}>{year.year}</option>)
             }
           </Form.Select>
           <Form.Select className="mb-2" onChange={e => semesterOnChange(e)}>
-            {
-              semester === undefined ?
-                <option hidden>Semester</option> :
-                <option value={semester.semester}>{semester.semester}</option>
-            }
+            <option hidden>Semester</option>
             {
               year &&
-              year.semesters.filter(seme => seme.semester !== semester?.semester)
+              year.semesters
                 .map((semester, _) => <option key={department?.name + year?.year + semester.semester} value={semester.semester}>{semester.semester}</option>)
             }
           </Form.Select>
