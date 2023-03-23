@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Modal, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import systemsEngineeringAndScienceData from "../Data/システム理工学部.json"
+import collegeOfEngineering from "../Data/工学部.json"
 import { CardColor } from "./CardColor";
 import { Lecture, lectureNone, Period, periodNum, toLecture, Week, weekNum } from "./Lecture";
 import { SelectedOthers } from "./SelectedOthers";
@@ -55,7 +56,9 @@ const checkGrade = (grade: string): boolean => {
 
 export const TimeTable = () => {
   const keyData = {
-    "departments": systemsEngineeringAndScienceData.departments,
+    "departments": collegeOfEngineering.departments.concat(
+      systemsEngineeringAndScienceData.departments
+    )
   }
 
   const departmentData = sessionStorage.getItem("department") !== null ?
