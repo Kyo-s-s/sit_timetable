@@ -16,6 +16,7 @@ function App() {
         <Nav className="me-auto">
           <Nav.Link href="https://github.com/Kyo-s-s/sit_timetable">GitHub</Nav.Link>
           <Nav.Link onClick={() => {
+            sessionStorage.removeItem("faculty");
             sessionStorage.removeItem("department");
             sessionStorage.removeItem("year");
             sessionStorage.removeItem("semester");
