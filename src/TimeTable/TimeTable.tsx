@@ -295,7 +295,9 @@ export const TimeTable = () => {
             {
               keyData &&
               keyData?.departments
-                .map((department, _) => <option key={department.name} value={department.name}>{department.name}</option>)
+                .map((department, _) => <option key={department.name} value={department.name}>{
+                  department.name.split(" ")[1]
+                }</option>)
             }
           </Form.Select>
           <Form.Select className="mb-2" onChange={e => yearOnChange(e)}>
