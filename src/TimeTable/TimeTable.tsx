@@ -1,7 +1,10 @@
 import React from "react";
 import { Button, Modal, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import keyData from "../Data/data.json"
+import collegeOfEngineeringData from "../Data/工学部.json";
+import systemsEngineeringAndScienceData from "../Data/システム理工学部.json";
+import engineeringAndDesignData from "../Data/デザイン工学部.json";
+import schoolOfArchitectureData from "../Data/建築学部.json";
 import { CardColor } from "./CardColor";
 import { Lecture, lectureNone, Period, periodNum, toLecture, Week, weekNum } from "./Lecture";
 import { SelectedOthers } from "./SelectedOthers";
@@ -43,6 +46,42 @@ type creditJson = {
   period: string,
 }
 
+type dataJson = {
+  departments: {
+    name: string,
+    years: {
+      year: string,
+      semesters: {
+        semester: string,
+        files: string[],
+      }[],
+    }[],
+  }[],
+}
+
+enum Faculty {
+  CollegeOfEngineering = "工学部",
+  SystemsEngineeringAndScience = "システム理工学部",
+  EngineeringAndDesign = "デザイン工学部",
+  SchoolOfArchitecture = "建築学部"
+}
+
+const getData = (str: string | undefined): dataJson | undefined => {
+  switch (str) {
+    case Faculty.CollegeOfEngineering:
+      return collegeOfEngineeringData;
+    case Faculty.SystemsEngineeringAndScience:
+      return systemsEngineeringAndScienceData;
+    case Faculty.EngineeringAndDesign:
+      return engineeringAndDesignData;
+    case Faculty.SchoolOfArchitecture:
+      return schoolOfArchitectureData;
+    default:
+      return undefined;
+  }
+}
+
+
 export type SelectedLecture = {
   table: Lecture[][],
   others: Lecture[],
@@ -54,6 +93,12 @@ const checkGrade = (grade: string): boolean => {
 };
 
 export const TimeTable = () => {
+
+  const facultyData = sessionStorage.getItem("faculty") !== null ?
+    sessionStorage.getItem("faculty") as string : undefined;
+  const [faculty, setFaculty] = React.useState<string | undefined>(undefined);
+
+  const [keyData, setKeyData] = React.useState<dataJson | undefined>(getData(facultyData));
 
   const departmentData = sessionStorage.getItem("department") !== null ?
     JSON.parse(sessionStorage.getItem("department") as string) as Department : undefined;
@@ -123,11 +168,20 @@ export const TimeTable = () => {
     JSON.parse(sessionStorage.getItem("obtained") as string) as { [key: string]: number } : undefined;
   const [obtained, setObtained] = React.useState<{ [key: string]: number } | undefined>(obtainedData);
 
+  const facultyOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFaculty(e.target.value);
+    sessionStorage.setItem("faculty", e.target.value);
+    setKeyData(getData(e.target.value));
+    setDepartment(undefined);
+    setYear(undefined);
+    setSemester(undefined);
+  };
+
   const departmentOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDepartment(keyData.departments.find((dep, _) => dep.name === e.target.value));
+    setDepartment(keyData?.departments.find((dep, _) => dep.name === e.target.value));
     sessionStorage.setItem(
       "department",
-      JSON.stringify(keyData.departments.find((dep, _) => dep.name === e.target.value))
+      JSON.stringify(keyData?.departments.find((dep, _) => dep.name === e.target.value))
     );
     setYear(undefined);
     setSemester(undefined);
@@ -226,39 +280,37 @@ export const TimeTable = () => {
     <>
       <Modal show={show}>
         <Modal.Header>
-          <Modal.Title>Select Department/Year/Semester</Modal.Title>
+          <Modal.Title>Select Faculty/Department/Year/Semester</Modal.Title>
         </Modal.Header>
         <div className="p-2">
-          <Form.Select className="my-2" onChange={e => departmentOnChange(e)}>
-            {department === undefined ?
-              <option hidden>Department</option> :
-              <option value={department.name}>{department.name}</option>
-            }
+          <Form.Select className="my-2" onChange={e => facultyOnChange(e)}>
+            <option hidden>Faculty</option> :
             {
-              keyData.departments.filter(dep => dep.name !== department?.name)
+              [Faculty.CollegeOfEngineering, Faculty.SystemsEngineeringAndScience, Faculty.EngineeringAndDesign, Faculty.SchoolOfArchitecture]
+                .map((faculty, _) => <option key={faculty} value={faculty}>{faculty}</option>)
+            }
+          </Form.Select>
+          <Form.Select className="my-2" onChange={e => departmentOnChange(e)}>
+            <option hidden>Department</option>
+            {
+              keyData &&
+              keyData?.departments
                 .map((department, _) => <option key={department.name} value={department.name}>{department.name}</option>)
             }
           </Form.Select>
           <Form.Select className="mb-2" onChange={e => yearOnChange(e)}>
-            {year === undefined ?
-              <option hidden>Year</option> :
-              <option value={year.year}>{year.year}</option>
-            }
+            <option hidden>Year</option>
             {
               department &&
-              department.years.filter(yea => yea.year !== year?.year)
+              department.years
                 .map((year, _) => <option key={department?.name + year.year} value={year.year}>{year.year}</option>)
             }
           </Form.Select>
           <Form.Select className="mb-2" onChange={e => semesterOnChange(e)}>
-            {
-              semester === undefined ?
-                <option hidden>Semester</option> :
-                <option value={semester.semester}>{semester.semester}</option>
-            }
+            <option hidden>Semester</option>
             {
               year &&
-              year.semesters.filter(seme => seme.semester !== semester?.semester)
+              year.semesters
                 .map((semester, _) => <option key={department?.name + year?.year + semester.semester} value={semester.semester}>{semester.semester}</option>)
             }
           </Form.Select>
