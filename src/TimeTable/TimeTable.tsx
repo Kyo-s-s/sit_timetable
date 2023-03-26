@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal, Container } from "react-bootstrap";
+import { Button, Modal, Container, Tabs, Tab } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import collegeOfEngineeringData from "../Data/工学部.json";
 import systemsEngineeringAndScienceData from "../Data/システム理工学部.json";
@@ -121,24 +121,24 @@ export const TimeTable = () => {
   }
 
   const selectedLectureData = sessionStorage.getItem("selectedLecture") !== null ?
-    JSON.parse(sessionStorage.getItem("selectedLecture") as string) as SelectedLecture : { table: _selectedLecture, others: [] };
-  const [selectedLecture, setStateSelectedLecture] = React.useState<SelectedLecture>(selectedLectureData);
-  const setSelectedLecture = (selectedLecture: SelectedLecture) => {
+    JSON.parse(sessionStorage.getItem("selectedLecture") as string) as SelectedLecture[] : [{ table: _selectedLecture, others: [] }];
+  const [selectedLecture, setStateSelectedLecture] = React.useState<SelectedLecture[]>(selectedLectureData);
+  const setSelectedLectures = (selectedLecture: SelectedLecture[]) => {
     setStateSelectedLecture(selectedLecture);
     sessionStorage.setItem("selectedLecture", JSON.stringify(selectedLecture));
   };
-  const oneSelectLecTable = (week: number, period: number, lecture: Lecture) => {
-    selectedLecture.table[week][period] = lecture;
-    setSelectedLecture(selectedLecture);
+  const oneSelectLecTable = (index: number, week: number, period: number, lecture: Lecture) => {
+    selectedLecture[index].table[week][period] = lecture;
+    setSelectedLectures(selectedLecture);
   };
 
-  const selectLec = (lecture: Lecture) => {
+  const selectLec = (index: number, lecture: Lecture) => {
     if (lecture.week === Week.Others) {
-      if (selectedLecture.others.find((lec, _) => lec.name === lecture.name)) {
+      if (selectedLecture[index].others.find((lec, _) => lec.name === lecture.name)) {
         return;
       }
-      selectedLecture.others.push(lecture);
-      setSelectedLecture(selectedLecture);
+      selectedLecture[index].others.push(lecture);
+      setSelectedLectures(selectedLecture);
       return;
     }
     for (let i = 0; i < lecture.time; i++) {
@@ -146,12 +146,12 @@ export const TimeTable = () => {
       if (i > 0) {
         lec.credit = 0;
       }
-      oneSelectLecTable(lec.week, lec.period + i, lec);
+      oneSelectLecTable(index, lec.week, lec.period + i, lec);
     }
   };
-  const setNull = (week: Week, period: Period) => {
-    selectedLecture.table[week][period] = lectureNone;
-    setSelectedLecture(selectedLecture);
+  const setNull = (index: number, week: Week, period: Period) => {
+    selectedLecture[index].table[week][period] = lectureNone;
+    setSelectedLectures(selectedLecture);
   };
 
 
@@ -300,26 +300,30 @@ export const TimeTable = () => {
         {
           TimeTableContents(
             generateLectures(),
-            selectedLecture,
-            selectLec,
+            selectedLecture[0],
+            (lec: Lecture) => { selectLec(0, lec) },
             cardColor,
-            setNull
+            (week: Week, period: Period) => { setNull(0, week, period) }
           )
         }
         {
           SelectedOthers(
             generateLectures(),
-            selectedLecture,
-            setSelectedLecture,
-            selectLec,
+            selectedLecture[0],
+            (selectedLec: SelectedLecture) => {
+              selectedLecture[0] = selectedLec;
+              setSelectedLectures(selectedLecture)
+            },
+            (lec: Lecture) => { selectLec(0, lec) },
             cardColor
           )
         }
+        { /* TODO: 0 ではなくすべて参照するように */}
         <h3 className="m-2">今期の取得予定単位数の総和</h3>
         {
           TimeTableCredit(
             generateLectures(),
-            selectedLecture,
+            selectedLecture[0],
             cardColor
           )
         }
@@ -328,7 +332,7 @@ export const TimeTable = () => {
           {
             TimeTableCredit(
               generateLectures(),
-              selectedLecture,
+              selectedLecture[0],
               cardColor,
               obtained
             )
