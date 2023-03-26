@@ -158,11 +158,6 @@ export const TimeTable = () => {
     setSelectedLecture(selectedLecture);
   };
 
-  const lecturesData = sessionStorage.getItem("lectures") !== null ?
-    JSON.parse(sessionStorage.getItem("lectures") as string) as Lecture[] : [lectureNone];
-  const [lectures, setLectures] = React.useState<Lecture[]>(lecturesData);
-
-  const [cardColor, setCardColor] = React.useState<CardColor>(new CardColor(lecturesData));
 
   const obtainedData = sessionStorage.getItem("obtained") !== null ?
     JSON.parse(sessionStorage.getItem("obtained") as string) as { [key: string]: number } : undefined;
@@ -242,10 +237,10 @@ export const TimeTable = () => {
         result.push(lec);
       }
     });
-    sessionStorage.setItem("lectures", JSON.stringify(result));
-    setLectures(result);
     return result;
   };
+
+  const [cardColor, setCardColor] = React.useState<CardColor>(new CardColor(generateLectures()));
 
   const generateObtained = (): { [key: string]: number } | undefined => {
     if (credits === undefined) {
@@ -329,7 +324,7 @@ export const TimeTable = () => {
       <Container>
         {
           TimeTableContents(
-            lectures,
+            generateLectures(),
             selectedLecture,
             selectLec,
             cardColor,
@@ -338,7 +333,7 @@ export const TimeTable = () => {
         }
         {
           SelectedOthers(
-            lectures,
+            generateLectures(),
             selectedLecture,
             setSelectedLecture,
             selectLec,
@@ -348,7 +343,7 @@ export const TimeTable = () => {
         <h3 className="m-2">今期の取得予定単位数の総和</h3>
         {
           TimeTableCredit(
-            lectures,
+            generateLectures(),
             selectedLecture,
             cardColor
           )
@@ -357,7 +352,7 @@ export const TimeTable = () => {
           <h3 className="m-2">今までの単位数と取得予定単位数の総和</h3>
           {
             TimeTableCredit(
-              lectures,
+              generateLectures(),
               selectedLecture,
               cardColor,
               obtained
