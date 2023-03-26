@@ -4,7 +4,7 @@ import { Lecture, lectureNone, periodList, Week, Period, weekList, weekToStr } f
 import { TimeTableCell } from "./TimeTableCell";
 import { CardColor } from "./CardColor";
 import { Search } from "./Search";
-import { SelectedLecture } from "./TimeTable";
+import { SelectedLecture } from "./Type";
 
 
 export const TimeTableContents = (

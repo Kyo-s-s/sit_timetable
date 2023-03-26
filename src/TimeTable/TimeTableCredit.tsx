@@ -2,15 +2,15 @@ import React from 'react';
 import { Container, Row, Table } from 'react-bootstrap';
 import { CardColor } from './CardColor';
 import { Lecture, lectureNone } from './Lecture';
-import { SelectedLecture } from './TimeTable';
+import { checkGrade, creditJson, SelectedLecture } from './Type';
 
 type Credits = { [key: string]: number };
 
 export const TimeTableCredit = (
   lectures: Lecture[],
-  selectedLecture: SelectedLecture,
+  selectedLectures: SelectedLecture[],
   cardColor: CardColor,
-  obtained: { [key: string]: number } = {}
+  obtained: creditJson[] = []
 ) => {
   let credits: Credits = {};
   for (let lecture of lectures) {
@@ -18,18 +18,26 @@ export const TimeTableCredit = (
     credits[lecture.category] = 0;
   }
 
-  for (let i = 0; i < selectedLecture.table.length; i++) {
-    for (let j = 0; j < selectedLecture.table[i].length; j++) {
-      if (selectedLecture.table[i][j].name !== lectureNone.name) {
-        credits[selectedLecture.table[i][j].category] += selectedLecture.table[i][j].credit;
+  for (const selectedLecture of selectedLectures) {
+    for (let i = 0; i < selectedLecture.table.length; i++) {
+      for (let j = 0; j < selectedLecture.table[i].length; j++) {
+        if (selectedLecture.table[i][j].name !== lectureNone.name) {
+          credits[selectedLecture.table[i][j].category] += selectedLecture.table[i][j].credit;
+        }
       }
+    }
+
+    for (let lecture of selectedLecture.others) {
+      if (lecture.name === lectureNone.name) continue;
+      credits[lecture.category] += lecture.credit;
     }
   }
 
-  for (let lecture of selectedLecture.others) {
-    if (lecture.name === lectureNone.name) continue;
-    credits[lecture.category] += lecture.credit;
-  }
+  obtained.forEach(data => {
+    if (checkGrade(data.grade)) {
+      credits[data.group] += data.count;
+    }
+  })
 
   return (
     <>
@@ -53,14 +61,13 @@ export const TimeTableCredit = (
                 {
                   Object.keys(credits).map((key, _) => {
                     return <td>
-                      {credits[key] + (obtained[key] ?? 0)}
+                      {credits[key]}
                     </td>
                   })
                 }
                 <td>
                   {
-                    Object.values(credits).reduce((a, b) => a + b, 0) +
-                    Object.values(obtained).reduce((a, b) => a + b, 0)
+                    Object.values(credits).reduce((a, b) => a + b, 0)
                   }
                 </td>
               </tr>

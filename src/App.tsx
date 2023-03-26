@@ -7,7 +7,6 @@ import { Alert, Container, Nav, Navbar } from 'react-bootstrap';
 function App() {
 
   const [alert, setAlert] = React.useState(true);
-  const [alert2022, setAlert2022] = React.useState(true);
 
   return <>
     <Navbar bg="light" variant="light">
@@ -21,7 +20,6 @@ function App() {
             sessionStorage.removeItem("year");
             sessionStorage.removeItem("selectedLecture");
             sessionStorage.removeItem("credits");
-            sessionStorage.removeItem("obtained");
             // Reload
             // eslint-disable-next-line no-self-assign
             window.location.href = window.location.href;
