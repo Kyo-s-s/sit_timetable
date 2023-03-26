@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Container, Form, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap"
 import { CardColor } from "./CardColor"
 import { Lecture, lectureNone, Week } from "./Lecture"
-import { SelectedLecture } from "./TimeTable"
+import { SelectedLecture } from "./Type"
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export const SelectedOthers = (
