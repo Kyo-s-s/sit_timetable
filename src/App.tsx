@@ -19,8 +19,6 @@ function App() {
             sessionStorage.removeItem("faculty");
             sessionStorage.removeItem("department");
             sessionStorage.removeItem("year");
-            sessionStorage.removeItem("semester");
-            sessionStorage.removeItem("lectures");
             sessionStorage.removeItem("selectedLecture");
             sessionStorage.removeItem("credits");
             sessionStorage.removeItem("obtained");

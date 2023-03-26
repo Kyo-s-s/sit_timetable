@@ -108,10 +108,6 @@ export const TimeTable = () => {
     JSON.parse(sessionStorage.getItem("year") as string) as Year : undefined;
   const [year, setYear] = React.useState<Year | undefined>(yearData);
 
-  const semesterData = sessionStorage.getItem("semester") !== null ?
-    JSON.parse(sessionStorage.getItem("semester") as string) as Semester : undefined;
-  const [semester, setSemester] = React.useState<Semester | undefined>(semesterData);
-
   const creditsData = sessionStorage.getItem("credits") !== null ?
     JSON.parse(sessionStorage.getItem("credits") as string) as creditJson[] : undefined;
   const [credits, setCreditData] = React.useState<creditJson[] | undefined>(creditsData);
@@ -169,7 +165,6 @@ export const TimeTable = () => {
     setKeyData(getData(e.target.value));
     setDepartment(undefined);
     setYear(undefined);
-    setSemester(undefined);
   };
 
   const departmentOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -179,7 +174,6 @@ export const TimeTable = () => {
       JSON.stringify(keyData?.departments.find((dep, _) => dep.name === e.target.value))
     );
     setYear(undefined);
-    setSemester(undefined);
   };
 
   const yearOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -187,15 +181,6 @@ export const TimeTable = () => {
     sessionStorage.setItem(
       "year",
       JSON.stringify(department?.years.find((year, _) => year.year === e.target.value))
-    );
-    setSemester(undefined);
-  };
-
-  const semesterOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSemester(year?.semesters.find((seme, _) => seme.semester === e.target.value));
-    sessionStorage.setItem(
-      "semester",
-      JSON.stringify(year?.semesters.find((seme, _) => seme.semester === e.target.value))
     );
   };
 
@@ -209,23 +194,21 @@ export const TimeTable = () => {
     }
   };
 
-  const generateLectures = () => {
+  const generateLectures = (id: number = 0) => {
     let lectures: Lecture[] = [lectureNone];
-    if (semester) {
-      semester.files.forEach((file, _) => {
-        const data = require("../Data/" + file);
-        data.lectures.forEach((lecture: lectureJson) => {
-          lectures.push(toLecture(
-            lecture.name,
-            lecture.week,
-            lecture.period,
-            lecture.credit,
-            lecture.division,
-            lecture.time
-          ));
-        });
+    year?.semesters[id].files.forEach((file, _) => {
+      const data = require("../Data/" + file);
+      data.lectures.forEach((lecture: lectureJson) => {
+        lectures.push(toLecture(
+          lecture.name,
+          lecture.week,
+          lecture.period,
+          lecture.credit,
+          lecture.division,
+          lecture.time
+        ));
       });
-    }
+    });
     let result: Lecture[] = [];
     lectures.forEach((lec, _) => {
       if (
@@ -303,21 +286,13 @@ export const TimeTable = () => {
                 .map((year, _) => <option key={department?.name + year.year} value={year.year}>{year.year}</option>)
             }
           </Form.Select>
-          <Form.Select className="mb-2" onChange={e => semesterOnChange(e)}>
-            <option hidden>Semester</option>
-            {
-              year &&
-              year.semesters
-                .map((semester, _) => <option key={department?.name + year?.year + semester.semester} value={semester.semester}>{semester.semester}</option>)
-            }
-          </Form.Select>
           <Form.Label className="mt-1">
             optional: your credit file (How to get: <a href="https://sit-graduation-checker.ecto0310.com/usage">here</a>)
           </Form.Label>
           <Form.Control type="file" accept="application/json" onChange={creditFileOnChange} />
         </div>
         <Modal.Footer>
-          <Button disabled={semester === undefined} onClick={onDone}>Done</Button>
+          <Button disabled={year === undefined} onClick={onDone}>Done</Button>
         </Modal.Footer>
       </Modal>
 
