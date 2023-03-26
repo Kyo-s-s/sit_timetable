@@ -28,7 +28,6 @@ export class CardColor {
         this.dict[lec.category] = CardColor.colors[Object.keys(this.dict).length];
       }
     }
-    console.log(JSON.stringify(this.dict));
   }
 
   getColor(category: string): string {
