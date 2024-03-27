@@ -83,7 +83,7 @@ const grade = [
 ];
 
 Array.from(document.querySelectorAll("#title"))
-    .slice(1) // 大学院時間割を除外
+    .slice(2) // 大学院時間割を除外 + 工学部を除外
     .map(title => {
         return {
             "table": title.nextElementSibling.querySelector("table"),
@@ -97,7 +97,7 @@ Array.from(document.querySelectorAll("#title"))
             const as = Array.from(tds[1].querySelectorAll("a"));
             as.forEach((a, idx) => {
                 const url = a.href;
-                const filename = "2023年度 " + block.faculty + "" + division + " " + grade[idx];
+                const filename = "2024年度 " + block.faculty + "" + division + " " + grade[idx];
                 download(url, filename.trim());
             })
         })
