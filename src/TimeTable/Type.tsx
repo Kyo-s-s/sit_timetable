@@ -5,58 +5,58 @@ import schoolOfArchitectureData from "../Data/建築学部.json";
 import { Lecture } from "./Lecture";
 
 export type Semester = {
-  semester: string,
-  files: String[],
-}
+  semester: string;
+  files: String[];
+};
 
 export type Year = {
-  year: string,
-  semesters: Semester[],
-}
+  year: string;
+  semesters: Semester[];
+};
 
 export type Department = {
-  name: string,
-  years: Year[],
-}
+  name: string;
+  years: Year[];
+};
 
 export type lectureJson = {
-  name: string,
-  week: string,
-  period: number,
-  teacher: string,
-  credit: number,
-  division: string,
-  time: number,
-}
+  name: string;
+  week: string;
+  period: number;
+  teacher: string;
+  credit: number;
+  division: string;
+  time: number;
+};
 
 export type creditJson = {
-  group: string,
-  name: string,
-  division: string,
-  count: number,
-  grade: string,
-  form: string,
-  period: string,
-}
+  group: string;
+  name: string;
+  division: string;
+  count: number;
+  grade: string;
+  form: string;
+  period: string;
+};
 
 export type dataJson = {
   departments: {
-    name: string,
+    name: string;
     years: {
-      year: string,
+      year: string;
       semesters: {
-        semester: string,
-        files: string[],
-      }[],
-    }[],
-  }[],
-}
+        semester: string;
+        files: string[];
+      }[];
+    }[];
+  }[];
+};
 
 export enum Faculty {
-  CollegeOfEngineering = "工学部",
-  SystemsEngineeringAndScience = "システム理工学部",
-  EngineeringAndDesign = "デザイン工学部",
-  SchoolOfArchitecture = "建築学部"
+  CollegeOfEngineering = "2023年度 工学部",
+  SystemsEngineeringAndScience = "2024年度 システム理工学部",
+  EngineeringAndDesign = "2023年度 デザイン工学部",
+  SchoolOfArchitecture = "2023年度 建築学部",
 }
 
 export const getData = (str: string | undefined): dataJson | undefined => {
@@ -72,15 +72,14 @@ export const getData = (str: string | undefined): dataJson | undefined => {
     default:
       return undefined;
   }
-}
+};
 
 export type SelectedLecture = {
-  table: Lecture[][],
-  others: Lecture[],
-}
+  table: Lecture[][];
+  others: Lecture[];
+};
 
 export const checkGrade = (grade: string): boolean => {
   const accept = ["S", "A", "B", "C", "N"];
   return accept.includes(grade);
 };
-
